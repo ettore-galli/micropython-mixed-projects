@@ -58,7 +58,7 @@ source myvirtualenv/bin/activate
 ## Create a project
 
 ```shell
-mkdir src
+mkdir [project-name]
 ```
 
 Then, write some micropython code in main.py
@@ -92,7 +92,7 @@ from machine import ADC, Pin, I2C  # type: ignore
 ## Create a new project
 
 ```txt
-src
+micropython_rpi_theremin
     __init__.py
     main.py
 ```
