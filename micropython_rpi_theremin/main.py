@@ -1,5 +1,5 @@
 import asyncio
-from collections.abc import Callable  # * noqa: UP035
+from collections.abc import Callable
 
 from machine import ADC, PWM, Pin  # type: ignore[import-not-found]
 
