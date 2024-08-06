@@ -25,9 +25,9 @@ micro-del:
 	mpremote fs rm typing.py || true
 
 micro: micro-del
-	mpremote fs cp micropython_rpi_theremin/main.py :main.py
-	mpremote fs cp micropython_rpi_theremin/typing.py :typing.py
-	mpremote fs mkdir collections
-	mpremote fs cp micropython_rpi_theremin/collections/abc.py :collections/abc.py
+	mpremote fs cp micropython_rpi_theremin/main.py :main.py || true
+	mpremote fs cp micropython_rpi_theremin/typing.py :typing.py || true
+	mpremote fs mkdir collections || true
+	mpremote fs cp micropython_rpi_theremin/collections/abc.py :collections/abc.py || true
 	mpremote reset
 
