@@ -1,5 +1,5 @@
 import asyncio
-from collections.abc import Callable
+from collections.abc import Callable  # * noqa: UP035
 
 from machine import ADC, PWM, Pin  # type: ignore[import-not-found]
 
@@ -8,9 +8,9 @@ class HardwareInformation:
     adc_gpio_pin: int = 26
     speaker_pwm_pin: int = 0
     miminum_pwm_frequency = 20
-    maximum_pwm_frequency = 1300
-    adc_range_top = 25000
-    adc_range_bottom = 3000
+    maximum_pwm_frequency = 700
+    adc_range_top = 20000
+    adc_range_bottom = 5000
 
 
 class ParameterConfiguration:
@@ -37,7 +37,9 @@ class PWMTheremin:
 
         self.adc = ADC(Pin(self.hardware_information.adc_gpio_pin))
 
-        self.speaker_pwm = PWM(Pin(0), freq=1000, duty_u16=32768)
+        self.speaker_pwm = PWM(
+            Pin(self.hardware_information.speaker_pwm_pin), freq=1000, duty_u16=32768
+        )
 
     async def read_adc_values_loop(
         self,
@@ -68,8 +70,22 @@ class PWMTheremin:
             )
         )
 
+    def get_frequency_value_nonlinear(self, raw_adc_value: int) -> float:
+        if raw_adc_value < self.hardware_information.adc_range_bottom:
+            return self.hardware_information.miminum_pwm_frequency
+
+        adc_range = (
+            self.hardware_information.adc_range_top
+            - self.hardware_information.adc_range_bottom
+        )
+        relative = (
+            (raw_adc_value - self.hardware_information.adc_range_bottom) / adc_range
+        ) ** 0.3
+
+        return self.hardware_information.maximum_pwm_frequency * relative
+
     def set_value(self, raw_adc_value: int) -> None:
-        frequency_value = self.get_frequency_value(raw_adc_value)
+        frequency_value = self.get_frequency_value_nonlinear(raw_adc_value)
         if frequency_value > self.hardware_information.miminum_pwm_frequency:
             self.speaker_pwm.freq(int(frequency_value))
 
