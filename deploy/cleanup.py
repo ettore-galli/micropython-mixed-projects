@@ -27,13 +27,13 @@ def cleanup(base: str = ".") -> None:
 
     for f in list_directories(base):
         file_to_remove = join(base, f)
-        notify(f"removing: {file_to_remove}")
+        notify(f"removing file: {file_to_remove}")
         os.remove(file_to_remove)  # noqa:  PTH107 (micropython)
-        cleanup(file_to_remove)
 
     for d in list_files(base):
         dir_to_remove = join(base, d)
-        notify(dir_to_remove)
+        notify(f"removing dir: {dir_to_remove}")
+        cleanup(dir_to_remove)
         os.rmdir(dir_to_remove)  # noqa:  PTH106 (micropython)
 
 
