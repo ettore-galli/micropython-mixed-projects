@@ -21,9 +21,9 @@ micro-cleanup-all:
 	mpremote run deploy/cleanup.py
 
 micro: micro-cleanup-all
-	mpremote fs cp micropython_rpi_theremin/main.py :main.py || true
-	mpremote fs cp micropython_rpi_theremin/typing.py :typing.py || true
-	mpremote fs mkdir collections || true
-	mpremote fs cp micropython_rpi_theremin/collections/abc.py :collections/abc.py || true
+	mpremote fs cp micropython_rpi_theremin/main.py :main.py # || true
+	mpremote fs cp micropython_rpi_theremin/typing.py :typing.py # || true
+	mpremote fs mkdir collections # || true
+	mpremote fs cp micropython_rpi_theremin/collections/abc.py :collections/abc.py # || true
 	mpremote reset
 
