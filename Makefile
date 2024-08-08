@@ -1,3 +1,4 @@
+all_targets=micropython_rpi_theremin/ tests/ deploy/
 
 install:
 	pip install .
@@ -8,9 +9,9 @@ install:
 	pip install ."[test]"
 
 lint:
-	black micropython_rpi_theremin/ tests/ deploy/
-	ruff check micropython_rpi_theremin/ tests/ deploy/
-	mypy micropython_rpi_theremin/ tests/ deploy/
+	black $(all_targets)
+	ruff check $(all_targets)
+	mypy $(all_targets)
 
 test:
 	pytest tests/ 
@@ -21,9 +22,9 @@ micro-cleanup-all:
 	mpremote run deploy/cleanup.py
 
 micro: micro-cleanup-all
-	mpremote fs cp micropython_rpi_theremin/main.py :main.py # || true
-	mpremote fs cp micropython_rpi_theremin/typing.py :typing.py # || true
-	mpremote fs mkdir collections # || true
-	mpremote fs cp micropython_rpi_theremin/collections/abc.py :collections/abc.py # || true
+	mpremote fs cp micropython_rpi_theremin/main.py :main.py 
+	mpremote fs cp python_dummies/typing.py :typing.py 
+	mpremote fs mkdir collections 
+	mpremote fs cp python_dummies/collections/abc.py :collections/abc.py 
 	mpremote reset
 
