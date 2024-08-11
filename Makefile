@@ -21,10 +21,15 @@ all: lint test
 micro-cleanup-all:
 	mpremote run deploy/cleanup.py
 
-micro: micro-cleanup-all
-	mpremote fs cp micropython_rpi_theremin/main.py :main.py 
+micro-common: 
 	mpremote fs cp python_dummies/typing.py :typing.py 
 	mpremote fs mkdir collections 
 	mpremote fs cp python_dummies/collections/abc.py :collections/abc.py 
-	mpremote reset
 
+micro-theremin: micro-cleanup-all micro-common
+	mpremote fs cp micropython_rpi_theremin/main.py :main.py 
+	mpremote reset
+	
+micro-organ: micro-cleanup-all micro-common
+	mpremote fs cp micropython_rpi_organ/main.py :main.py 
+	mpremote reset
