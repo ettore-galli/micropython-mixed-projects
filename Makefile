@@ -30,6 +30,4 @@ micro-theremin: micro-cleanup-all micro-common
 	mpremote fs cp micropython_rpi_theremin/main.py :main.py 
 	mpremote reset
 	
-micro-organ: micro-cleanup-all micro-common
-	mpremote fs cp micropython_rpi_organ/main.py :main.py 
-	mpremote reset
+

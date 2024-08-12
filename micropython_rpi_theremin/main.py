@@ -59,35 +59,14 @@ class PWMTheremin:
         )
 
     def get_frequency_value(self, raw_adc_value: int) -> float:
-        return self.hardware_information.miminum_pwm_frequency + (
-            self.hardware_information.maximum_pwm_frequency
-            * (
-                raw_adc_value
-                / (
-                    self.hardware_information.adc_range_top
-                    - self.hardware_information.adc_range_bottom
-                )
-            )
-        )
-
-    def get_frequency_value_nonlinear(self, raw_adc_value: int) -> float:
-        if raw_adc_value < self.hardware_information.adc_range_bottom:
-            return self.hardware_information.miminum_pwm_frequency
-
-        adc_range = (
-            self.hardware_information.adc_range_top
-            - self.hardware_information.adc_range_bottom
-        )
-        relative = (
-            (raw_adc_value - self.hardware_information.adc_range_bottom) / adc_range
-        ) ** 0.3
-
-        return self.hardware_information.maximum_pwm_frequency * relative
+        return self.hardware_information.miminum_pwm_frequency + int(raw_adc_value / 32)
 
     def set_value(self, raw_adc_value: int) -> None:
-        frequency_value = self.get_frequency_value_nonlinear(raw_adc_value)
+        frequency_value = self.get_frequency_value(raw_adc_value)
         if frequency_value > self.hardware_information.miminum_pwm_frequency:
             self.speaker_pwm.freq(int(frequency_value))
+        else:
+            self.speaker_pwm.deinit()
 
 
 if __name__ == "__main__":
