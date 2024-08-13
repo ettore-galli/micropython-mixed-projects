@@ -8,7 +8,7 @@ from machine import ADC, PWM, Pin  # type: ignore[import-not-found]
 class HardwareInformation:
     pitch_adc_gpio_pin: int = 26
     set_adc_gpio_pin: int = 27
-    speaker_pwm_pins: ClassVar[list[int]] = [0, 2]
+    speaker_pwm_pins: ClassVar[list[int]] = [0, 2, 4]
 
     miminum_pwm_frequency = 20
 
@@ -41,27 +41,24 @@ class PWMTheremin:
         self.set_pwm_on(freq=1000)
 
     def set_pwm_off(self) -> None:
-        self.speaker_pwms[0].deinit()
-        self.speaker_pwms[1].deinit()
+        for speaker_pwm in self.speaker_pwms:
+            speaker_pwm.deinit()
 
     def set_pwm_on(self, freq: int) -> None:
         self.speaker_pwms = [
             PWM(
-                Pin(self.hardware_information.speaker_pwm_pins[0]),
+                Pin(pwm_pin),
                 freq=freq,
                 duty_u16=32768,
-            ),
-            PWM(
-                Pin(self.hardware_information.speaker_pwm_pins[1]),
-                freq=freq,
-                duty_u16=32768,
-            ),
+            )
+            for pwm_pin in self.hardware_information.speaker_pwm_pins
         ]
         self.set_pwm_freq(freq=freq)
 
     def set_pwm_freq(self, freq: int) -> None:
         self.speaker_pwms[0].freq(freq)
-        self.speaker_pwms[1].freq(2 * freq)
+        self.speaker_pwms[1].freq(int(freq * 2))
+        self.speaker_pwms[2].freq(int(freq * 3))
 
     async def read_adc_values_loop(
         self,
