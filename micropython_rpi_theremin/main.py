@@ -1,16 +1,16 @@
 import asyncio
 from collections.abc import Callable
+from typing import ClassVar
 
 from machine import ADC, PWM, Pin  # type: ignore[import-not-found]
 
 
 class HardwareInformation:
-    adc_gpio_pin: int = 26
-    speaker_pwm_pin: int = 0
+    pitch_adc_gpio_pin: int = 26
+    set_adc_gpio_pin: int = 27
+    speaker_pwm_pins: ClassVar[list[int]] = [0, 2]
+
     miminum_pwm_frequency = 20
-    maximum_pwm_frequency = 700
-    adc_range_top = 20000
-    adc_range_bottom = 5000
 
 
 class ParameterConfiguration:
@@ -35,38 +35,63 @@ class PWMTheremin:
             else ParameterConfiguration()
         )
 
-        self.adc = ADC(Pin(self.hardware_information.adc_gpio_pin))
+        self.pitch_adc = ADC(Pin(self.hardware_information.pitch_adc_gpio_pin))
+        self.set_adc = ADC(Pin(self.hardware_information.set_adc_gpio_pin))
 
-        self.speaker_pwm = PWM(
-            Pin(self.hardware_information.speaker_pwm_pin), freq=1000, duty_u16=32768
-        )
+        self.set_pwm_on(freq=1000)
+
+    def set_pwm_off(self) -> None:
+        self.speaker_pwms[0].deinit()
+        self.speaker_pwms[1].deinit()
+
+    def set_pwm_on(self, freq: int) -> None:
+        self.speaker_pwms = [
+            PWM(
+                Pin(self.hardware_information.speaker_pwm_pins[0]),
+                freq=freq,
+                duty_u16=32768,
+            ),
+            PWM(
+                Pin(self.hardware_information.speaker_pwm_pins[1]),
+                freq=freq,
+                duty_u16=32768,
+            ),
+        ]
+        self.set_pwm_freq(freq=freq)
+
+    def set_pwm_freq(self, freq: int) -> None:
+        self.speaker_pwms[0].freq(freq)
+        self.speaker_pwms[1].freq(2 * freq)
 
     async def read_adc_values_loop(
         self,
         sample_value_reader: Callable[[], int],
-        sample_value_consumer: Callable[[int], None],
+        set_value_reader: Callable[[], int],
+        sample_value_consumer: Callable[[int, int], None],
     ) -> None:
 
         while True:
             raw_adc_value = sample_value_reader()
-            sample_value_consumer(raw_adc_value)
+            raw_set_value = set_value_reader()
+            sample_value_consumer(raw_adc_value, raw_set_value)
             await asyncio.sleep(self.parameter_configuration.adc_delay)
 
     async def main(self) -> None:
         await self.read_adc_values_loop(
-            sample_value_reader=self.adc.read_u16,
+            sample_value_reader=self.pitch_adc.read_u16,
+            set_value_reader=self.set_adc.read_u16,
             sample_value_consumer=self.set_value,
         )
 
     def get_frequency_value(self, raw_adc_value: int) -> float:
-        return self.hardware_information.miminum_pwm_frequency + int(raw_adc_value / 32)
+        return self.hardware_information.miminum_pwm_frequency + int(raw_adc_value / 16)
 
-    def set_value(self, raw_adc_value: int) -> None:
+    def set_value(self, raw_adc_value: int, raw_set_value: int) -> None:
         frequency_value = self.get_frequency_value(raw_adc_value)
-        if frequency_value > self.hardware_information.miminum_pwm_frequency:
-            self.speaker_pwm.freq(int(frequency_value))
+        if raw_adc_value > raw_set_value:
+            self.set_pwm_freq(int(frequency_value))
         else:
-            self.speaker_pwm.deinit()
+            self.set_pwm_off()
 
 
 if __name__ == "__main__":
