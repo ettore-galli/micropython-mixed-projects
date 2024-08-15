@@ -81,13 +81,6 @@ class PWMTheremin:
         )
 
     def get_frequency_value(self, raw_adc_value: int, raw_set_value: int) -> float:
-        print(
-            raw_adc_value,
-            raw_set_value,
-            raw_set_value - raw_adc_value,
-            raw_adc_value < raw_set_value,
-        )
-        # return self.hardware_information.miminum_pwm_frequency + int(raw_adc_value / 16)
         return 8 + int((raw_set_value - raw_adc_value) / 8)
 
     def set_value(self, raw_adc_value: int, raw_set_value: int) -> None:
