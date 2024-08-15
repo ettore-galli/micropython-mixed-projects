@@ -57,8 +57,8 @@ class PWMTheremin:
 
     def set_pwm_freq(self, freq: int) -> None:
         self.speaker_pwms[0].freq(freq)
-        self.speaker_pwms[1].freq(int(freq * 2))
-        self.speaker_pwms[2].freq(int(freq * 3))
+        self.speaker_pwms[1].freq(int(freq * 1.005))
+        self.speaker_pwms[2].freq(int(freq / 1.005))
 
     async def read_adc_values_loop(
         self,
@@ -80,12 +80,19 @@ class PWMTheremin:
             sample_value_consumer=self.set_value,
         )
 
-    def get_frequency_value(self, raw_adc_value: int) -> float:
-        return self.hardware_information.miminum_pwm_frequency + int(raw_adc_value / 16)
+    def get_frequency_value(self, raw_adc_value: int, raw_set_value: int) -> float:
+        print(
+            raw_adc_value,
+            raw_set_value,
+            raw_set_value - raw_adc_value,
+            raw_adc_value < raw_set_value,
+        )
+        # return self.hardware_information.miminum_pwm_frequency + int(raw_adc_value / 16)
+        return 8 + int((raw_set_value - raw_adc_value) / 8)
 
     def set_value(self, raw_adc_value: int, raw_set_value: int) -> None:
-        frequency_value = self.get_frequency_value(raw_adc_value)
-        if raw_adc_value > raw_set_value:
+        frequency_value = self.get_frequency_value(raw_adc_value, raw_set_value)
+        if raw_adc_value < raw_set_value:
             self.set_pwm_freq(int(frequency_value))
         else:
             self.set_pwm_off()
