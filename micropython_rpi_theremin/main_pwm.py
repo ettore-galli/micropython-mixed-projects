@@ -11,7 +11,7 @@ class HardwareInformation:
 
 
 class ParameterConfiguration:
-    adc_delay_us: int = 10000
+    adc_delay_ms: int = 100
 
 
 class PWMTheremin:
@@ -20,6 +20,7 @@ class PWMTheremin:
         hardware_information: HardwareInformation | None = None,
         parameter_configuration: ParameterConfiguration | None = None,
     ) -> None:
+
         self.hardware_information = (
             hardware_information
             if hardware_information is not None
@@ -47,14 +48,6 @@ class PWMTheremin:
             duty_u16=32768,
         )
 
-        self.set_pwm_freq(freq=freq)
-
-    def set_pwm_freq(self, freq: int) -> None:
-        self.speaker_pwm.freq(freq)
-
-    def set_pwm_duty(self, duty: int) -> None:
-        self.speaker_pwm.duty_u16(duty)
-
     def read_adc_values_loop(
         self,
         sample_value_reader: Callable[[], int],
@@ -66,7 +59,7 @@ class PWMTheremin:
             raw_adc_value = sample_value_reader()
             raw_set_value = set_value_reader()
             sample_value_consumer(raw_adc_value, raw_set_value)
-            utime.sleep_us(self.parameter_configuration.adc_delay_us)
+            utime.sleep_us(self.parameter_configuration.adc_delay_ms)
 
     def main(self) -> None:
         self.read_adc_values_loop(
@@ -77,6 +70,9 @@ class PWMTheremin:
 
     def get_frequency_value(self, raw_adc_value: int, raw_set_value: int) -> float:
         return 8 + int((raw_set_value - raw_adc_value) / 8)
+
+    def set_pwm_freq(self, freq: int) -> None:
+        self.speaker_pwm.freq(freq)
 
     def set_value(self, raw_adc_value: int, raw_set_value: int) -> None:
         frequency_value = self.get_frequency_value(raw_adc_value, raw_set_value)
