@@ -30,4 +30,7 @@ micro-theremin: micro-cleanup-all micro-common
 	mpremote fs cp micropython_rpi_theremin/main.py :main.py 
 	mpremote reset
 	
+micro-pwm: micro-cleanup-all micro-common
+	mpremote fs cp micropython_rpi_theremin/main_pwm.py :main.py 
+	mpremote reset
 
