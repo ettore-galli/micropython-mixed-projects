@@ -1,4 +1,5 @@
 from collections.abc import Callable
+from typing import ClassVar
 
 import utime  # type: ignore[import-not-found]
 from machine import ADC, PWM, Pin  # type: ignore[import-not-found]
@@ -7,7 +8,7 @@ from machine import ADC, PWM, Pin  # type: ignore[import-not-found]
 class HardwareInformation:
     pitch_adc_gpio_pin: int = 26
     set_adc_gpio_pin: int = 27
-    speaker_pwm_pin: int = 0
+    speaker_pwm_pins: ClassVar[list[int]] = [0, 2, 4]
 
 
 class ParameterConfiguration:
@@ -39,14 +40,19 @@ class PWMTheremin:
         self.set_pwm_on(freq=1000)
 
     def set_pwm_off(self) -> None:
-        self.speaker_pwm.deinit()
+        for speaker_pwm in self.speaker_pwms:
+            speaker_pwm.deinit()
 
     def set_pwm_on(self, freq: int) -> None:
-        self.speaker_pwm: PWM = PWM(
-            Pin(self.hardware_information.speaker_pwm_pin),
-            freq=freq,
-            duty_u16=32768,
-        )
+        self.speaker_pwms = [
+            PWM(
+                Pin(pwm_pin),
+                freq=freq,
+                duty_u16=32768,
+            )
+            for pwm_pin in self.hardware_information.speaker_pwm_pins
+        ]
+        self.set_pwm_freq(freq=freq)
 
     def read_adc_values_loop(
         self,
@@ -72,7 +78,9 @@ class PWMTheremin:
         return 8 + int((raw_set_value - raw_adc_value) / 8)
 
     def set_pwm_freq(self, freq: int) -> None:
-        self.speaker_pwm.freq(freq)
+        self.speaker_pwms[0].freq(freq)
+        self.speaker_pwms[1].freq(int(freq * 1.005))
+        self.speaker_pwms[2].freq(int(freq / 1.005))
 
     def set_value(self, raw_adc_value: int, raw_set_value: int) -> None:
         frequency_value = self.get_frequency_value(raw_adc_value, raw_set_value)
