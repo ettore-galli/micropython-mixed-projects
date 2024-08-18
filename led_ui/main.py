@@ -59,9 +59,11 @@ class LedUI:
 
     def set_button_on_state(self) -> None:
         self.button_status.press_start = time.ticks_ms()
+        self.led.on()
 
     def set_button_off_state(self) -> None:
         self.button_status.press_stop = time.ticks_ms()
+        self.led.off()
 
     def button_change(self, pin: Pin) -> None:
         if pin.value() == 1:
@@ -76,5 +78,5 @@ class LedUI:
 
 
 if __name__ == "__main__":
-    theremin = LedUI()
-    asyncio.run(theremin.main())
+    led_ui = LedUI()
+    asyncio.run(led_ui.main())
