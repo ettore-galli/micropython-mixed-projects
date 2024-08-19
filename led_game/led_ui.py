@@ -1,7 +1,16 @@
-from collections.abc import Callable
-
 import utime as time  # type: ignore[import-not-found]
 from machine import Pin  # type: ignore[import-not-found]
+
+
+class Time:
+    def sleep(self, seconds: float) -> None:
+        time.sleep(seconds)
+
+    def ticks_ms(self) -> int:
+        return time.ticks_ms()
+
+    def ticks_diff(self, ticks1: int, ticks2: int) -> int:
+        return time.ticks_diff(ticks1, ticks2)
 
 
 class HardwareInformation:
@@ -37,7 +46,7 @@ class LedUI:
         hardware_information: HardwareInformation | None = None,
         parameter_configuration: ParameterConfiguration | None = None,
         one_second_game_information: OneSecondGameConfiguration | None = None,
-        sleep: Callable[[float], None] | None = None,
+        time: Time | None = None,
     ) -> None:
 
         self.button_status: ButtonStatus = ButtonStatus()
@@ -60,7 +69,7 @@ class LedUI:
             else OneSecondGameConfiguration()
         )
 
-        self.sleep = sleep if sleep is not None else time.sleep
+        self.time = time if time is not None else Time()
 
         self.led = Pin(self.hardware_information.led_pin, Pin.OUT)
         self.button = Pin(self.hardware_information.button_pin, Pin.IN)
@@ -69,28 +78,28 @@ class LedUI:
         )
 
     def set_button_on_state(self) -> None:
-        self.button_status.press_start = time.ticks_ms()
+        self.button_status.press_start = self.time.ticks_ms()
         self.led.on()
 
     def set_button_off_state(self) -> None:
-        self.button_status.press_stop = time.ticks_ms()
+        self.button_status.press_stop = self.time.ticks_ms()
         self.led.off()
 
     def notify_win(self) -> None:
-        self.sleep(0.5)
+        self.time.sleep(0.5)
         for _ in range(10):
             self.led.on()
-            self.sleep(0.1)
+            self.time.sleep(0.1)
             self.led.off()
-            self.sleep(0.1)
+            self.time.sleep(0.1)
 
     def notify_loose(self) -> None:
-        self.sleep(0.5)
+        self.time.sleep(0.5)
         for _ in range(3):
             self.led.on()
-            self.sleep(0.7)
+            self.time.sleep(0.7)
             self.led.off()
-            self.sleep(0.7)
+            self.time.sleep(0.7)
 
     def button_change(self, pin: Pin) -> None:
         if pin.value() == 1:
