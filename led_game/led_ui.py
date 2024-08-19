@@ -1,3 +1,5 @@
+from collections.abc import Callable
+
 import utime as time  # type: ignore[import-not-found]
 from machine import Pin  # type: ignore[import-not-found]
 
@@ -35,6 +37,7 @@ class LedUI:
         hardware_information: HardwareInformation | None = None,
         parameter_configuration: ParameterConfiguration | None = None,
         one_second_game_information: OneSecondGameConfiguration | None = None,
+        sleep: Callable[[float], None] | None = None,
     ) -> None:
 
         self.button_status: ButtonStatus = ButtonStatus()
@@ -57,6 +60,8 @@ class LedUI:
             else OneSecondGameConfiguration()
         )
 
+        self.sleep = sleep if sleep is not None else time.sleep
+
         self.led = Pin(self.hardware_information.led_pin, Pin.OUT)
         self.button = Pin(self.hardware_information.button_pin, Pin.IN)
         self.button.irq(
@@ -72,20 +77,20 @@ class LedUI:
         self.led.off()
 
     def notify_win(self) -> None:
-        time.sleep(0.5)
+        self.sleep(0.5)
         for _ in range(10):
             self.led.on()
-            time.sleep(0.1)
+            self.sleep(0.1)
             self.led.off()
-            time.sleep(0.1)
+            self.sleep(0.1)
 
     def notify_loose(self) -> None:
-        time.sleep(0.5)
+        self.sleep(0.5)
         for _ in range(3):
             self.led.on()
-            time.sleep(0.7)
+            self.sleep(0.7)
             self.led.off()
-            time.sleep(0.7)
+            self.sleep(0.7)
 
     def button_change(self, pin: Pin) -> None:
         if pin.value() == 1:
