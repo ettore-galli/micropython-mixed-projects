@@ -1,16 +1,22 @@
+from abc import ABC, abstractmethod
+
 import utime as time  # type: ignore[import-not-found]
 from machine import Pin  # type: ignore[import-not-found]
 
 
-class Time:
+class Time(ABC):
+    @abstractmethod
     def sleep(self, seconds: float) -> None:
-        time.sleep(seconds)
+        _ = seconds
 
+    @abstractmethod
     def ticks_ms(self) -> int:
-        return time.ticks_ms()
+        return 0
 
+    @abstractmethod
     def ticks_diff(self, ticks1: int, ticks2: int) -> int:
-        return time.ticks_diff(ticks1, ticks2)
+        _ = ticks1, ticks2
+        return 0
 
 
 class HardwareInformation:
@@ -80,9 +86,9 @@ class OneSecondGameEngine:
 
     def __init__(
         self,
+        time: Time,
         hardware_information: HardwareInformation | None = None,
         one_second_game_information: OneSecondGameConfiguration | None = None,
-        time: Time | None = None,
     ) -> None:
 
         self.button_status: ButtonStatus = ButtonStatus()
@@ -99,7 +105,7 @@ class OneSecondGameEngine:
             else OneSecondGameConfiguration()
         )
 
-        self.time = time if time is not None else Time()
+        self.time = time
 
         self.led = Pin(self.hardware_information.led_pin, Pin.OUT)
         self.button = Pin(self.hardware_information.button_pin, Pin.IN)

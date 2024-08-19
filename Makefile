@@ -23,6 +23,7 @@ micro-cleanup-all:
 
 micro-common: 
 	mpremote fs cp python_dummies/typing.py :typing.py 
+	mpremote fs cp python_dummies/abc.py :abc.py 
 	mpremote fs mkdir collections 
 	mpremote fs cp python_dummies/collections/abc.py :collections/abc.py 
 
@@ -35,8 +36,7 @@ micro-pwm: micro-cleanup-all micro-common
 	mpremote reset
 
 led-game: micro-cleanup-all micro-common
-	# mpremote fs cp led_game/hardware_time.py :hardware_time.py 
-	# mpremote fs cp led_game/hardware_pin.py :hardware_pin.py 
+	mpremote fs cp led_game/hardware.py :hardware.py 
 	mpremote fs cp led_game/game_engine.py :game_engine.py 
 	mpremote fs cp led_game/main.py :main.py 
 	mpremote reset
