@@ -16,6 +16,7 @@ version = {attr = "micropython_rpi_theremin.__version__"}
 [project.optional-dependencies]
 development = [
   "micropython-rp2-pico_w-stubs",
+  "micropython-esp8266-stubs",
 ]
 format = [
   "black>24",
