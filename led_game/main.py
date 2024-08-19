@@ -1,7 +1,7 @@
 import asyncio
 
-from led_ui import LedUI  # type: ignore[import-not-found]
+from game_engine import OneSecondGameEngine  # type: ignore[import-not-found]
 
 if __name__ == "__main__":
-    led_game = LedUI()
+    led_game = OneSecondGameEngine()
     asyncio.run(led_game.main())
