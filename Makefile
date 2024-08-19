@@ -1,4 +1,4 @@
-all_targets=micropython_rpi_theremin/ led_ui/ tests/ deploy/
+all_targets=micropython_rpi_theremin/ led_game/ tests/ deploy/
 
 install:
 	pip install .
@@ -34,6 +34,7 @@ micro-pwm: micro-cleanup-all micro-common
 	mpremote fs cp micropython_rpi_theremin/main_pwm.py :main.py 
 	mpremote reset
 
-led-ui: micro-cleanup-all micro-common
-	mpremote fs cp led_ui/main.py :main.py 
+led-game: micro-cleanup-all micro-common
+	mpremote fs cp led_game/main.py :main.py 
+	mpremote fs cp led_game/led_ui.py :led_ui.py 
 	mpremote reset

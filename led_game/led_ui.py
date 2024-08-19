@@ -1,16 +1,22 @@
-import asyncio
-
 import utime as time  # type: ignore[import-not-found]
 from machine import Pin  # type: ignore[import-not-found]
 
 
 class HardwareInformation:
-    led_pin: int = 13
-    button_pin: int = 4
+    def __init__(self) -> None:
+        self.led_pin: int = 13
+        self.button_pin: int = 4
 
 
 class ParameterConfiguration:
-    pass
+    def __init__(self) -> None:
+        pass
+
+
+class OneSecondGameConfiguration:
+    def __init__(self) -> None:
+        self.reference = 1000
+        self.delta = 400
 
 
 class ButtonStatus:
@@ -28,6 +34,7 @@ class LedUI:
         self,
         hardware_information: HardwareInformation | None = None,
         parameter_configuration: ParameterConfiguration | None = None,
+        one_second_game_information: OneSecondGameConfiguration | None = None,
     ) -> None:
 
         self.button_status: ButtonStatus = ButtonStatus()
@@ -44,18 +51,17 @@ class LedUI:
             else ParameterConfiguration()
         )
 
+        self.one_second_game_information = (
+            one_second_game_information
+            if one_second_game_information is not None
+            else OneSecondGameConfiguration()
+        )
+
         self.led = Pin(self.hardware_information.led_pin, Pin.OUT)
         self.button = Pin(self.hardware_information.button_pin, Pin.IN)
         self.button.irq(
             trigger=Pin.IRQ_FALLING | Pin.IRQ_RISING, handler=self.button_change
         )
-
-    async def led_loop(self) -> None:
-        while True:
-            self.led.on()
-            await asyncio.sleep(0.3)
-            self.led.off()
-            await asyncio.sleep(3)
 
     def set_button_on_state(self) -> None:
         self.button_status.press_start = time.ticks_ms()
@@ -65,18 +71,37 @@ class LedUI:
         self.button_status.press_stop = time.ticks_ms()
         self.led.off()
 
+    def notify_win(self) -> None:
+        time.sleep(0.5)
+        for _ in range(10):
+            self.led.on()
+            time.sleep(0.1)
+            self.led.off()
+            time.sleep(0.1)
+
+    def notify_loose(self) -> None:
+        time.sleep(0.5)
+        for _ in range(3):
+            self.led.on()
+            time.sleep(0.7)
+            self.led.off()
+            time.sleep(0.7)
+
     def button_change(self, pin: Pin) -> None:
         if pin.value() == 1:
             self.set_button_on_state()
         if pin.value() == 0:
             self.set_button_off_state()
-            print(self.button_status.get_last_duration())  # noqa: T201
+            if (
+                abs(
+                    self.button_status.get_last_duration()
+                    - self.one_second_game_information.reference
+                )
+                < self.one_second_game_information.delta
+            ):
+                self.notify_win()
+            else:
+                self.notify_loose()
 
     async def main(self) -> None:
-        led = asyncio.create_task(self.led_loop())
-        await asyncio.gather(led)
-
-
-if __name__ == "__main__":
-    led_ui = LedUI()
-    asyncio.run(led_ui.main())
+        pass
