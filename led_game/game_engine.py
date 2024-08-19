@@ -1,23 +1,7 @@
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 
-from base import Incomplete  # type: ignore[import-not-found]
-from machine import Pin  # type: ignore[import-not-found]
-
-
-class Time(ABC):
-    @abstractmethod
-    def sleep(self, seconds: float) -> None:
-        _ = seconds
-
-    @abstractmethod
-    def ticks_ms(self) -> int:
-        return 0
-
-    @abstractmethod
-    def ticks_diff(self, ticks1: int, ticks2: int) -> int:
-        _ = ticks1, ticks2
-        return 0
+from base import BaseTime, Incomplete  # type: ignore[import-not-found]
 
 
 class BasePin(ABC):
@@ -112,10 +96,13 @@ class OneSecondGameEngine:
 
     def __init__(
         self,
-        time: Time,
+        time: BaseTime,
+        pin_class: type[BasePin],
         hardware_information: HardwareInformation | None = None,
         one_second_game_information: OneSecondGameConfiguration | None = None,
     ) -> None:
+        self.time = time
+        self.pin_class = pin_class
 
         self.button_status: ButtonStatus = ButtonStatus()
 
@@ -131,12 +118,13 @@ class OneSecondGameEngine:
             else OneSecondGameConfiguration()
         )
 
-        self.time = time
-
-        self.led = Pin(self.hardware_information.led_pin, Pin.OUT)
-        self.button = Pin(self.hardware_information.button_pin, Pin.IN)
+        self.led = self.pin_class(self.hardware_information.led_pin, self.pin_class.OUT)
+        self.button = self.pin_class(
+            self.hardware_information.button_pin, self.pin_class.IN
+        )
         self.button.irq(
-            trigger=Pin.IRQ_FALLING | Pin.IRQ_RISING, handler=self.button_change
+            trigger=self.pin_class.IRQ_FALLING | self.pin_class.IRQ_RISING,
+            handler=self.button_change,
         )
 
     def set_button_on_state(self) -> None:
@@ -190,7 +178,7 @@ class OneSecondGameEngine:
             self.button_status.press_stop, self.button_status.press_start
         )
 
-    def button_change(self, pin: Pin) -> None:
+    def button_change(self, pin: BasePin) -> None:
         if pin.value() == 1:
             self.set_button_on_state()
         if pin.value() == 0:
