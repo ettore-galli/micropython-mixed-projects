@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 
-import utime as time  # type: ignore[import-not-found]
 from machine import Pin  # type: ignore[import-not-found]
 
 
@@ -69,9 +68,6 @@ class ButtonStatus:
         self.press_start: int = 0
         self.press_stop: int = 0
         self.last_duration: int = 0
-
-    def get_last_duration(self) -> int:
-        return time.ticks_diff(self.press_stop, self.press_start)
 
 
 class OneSecondGameResult:
@@ -159,13 +155,18 @@ class OneSecondGameEngine:
         }
         action_map.get(game_result, lambda: None)()
 
+    def get_last_duration(self) -> int:
+        return self.time.ticks_diff(
+            self.button_status.press_stop, self.button_status.press_start
+        )
+
     def button_change(self, pin: Pin) -> None:
         if pin.value() == 1:
             self.set_button_on_state()
         if pin.value() == 0:
             self.set_button_off_state()
             game_result: int = self.calculate_game_result(
-                duration=self.button_status.get_last_duration(),
+                duration=self.get_last_duration(),
                 game_configuration=self.one_second_game_information,
             )
             self.notify_game_result(game_result=game_result)
