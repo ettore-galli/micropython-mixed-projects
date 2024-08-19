@@ -14,7 +14,7 @@ lint:
 	mypy $(all_targets)
 
 test:
-	pytest tests/ 
+	export PYTHONPATH=./led_game; pytest tests/ 
 
 all: lint test
 
