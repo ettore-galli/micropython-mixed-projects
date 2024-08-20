@@ -117,3 +117,18 @@ def test_calculate_game_result() -> None:
         duration=700, game_configuration=OneSecondGameConfiguration()
     )
     assert result == OneSecondGameResult.GAME_RESULT_WIN
+
+
+def test_get_last_duration() -> None:
+    mock_time = MagicMock()
+    mock_pin_class = MagicMock()
+    led_game = OneSecondGameEngine(
+        time=mock_time,
+        pin_class=mock_pin_class,
+    )
+    led_game.button_status.press_start = 123
+    led_game.button_status.press_stop = 369
+
+    led_game.get_last_duration()
+
+    assert next(iter(mock_time.ticks_diff.mock_calls)).args == (369, 123)
