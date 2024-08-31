@@ -35,6 +35,10 @@ micro-pwm: micro-cleanup-all micro-common
 	mpremote fs cp micropython_rpi_theremin/main_pwm.py :main.py 
 	mpremote reset
 
+micro-cap: micro-cleanup-all micro-common
+	mpremote fs cp micropython_rpi_theremin/main_cap.py :main.py 
+	mpremote reset
+
 led-game: micro-cleanup-all micro-common
 	mpremote fs cp led_game/base.py :base.py 
 	mpremote fs cp led_game/hardware.py :hardware.py 
