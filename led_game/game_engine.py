@@ -1,4 +1,4 @@
-from base import BasePin, BaseTime  # type: ignore[import-not-found]
+from base import BasePin, BaseTime  # type: ignore[import-untyped]
 
 
 class HardwareInformation:
