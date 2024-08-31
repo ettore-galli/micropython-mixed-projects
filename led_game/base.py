@@ -15,6 +15,10 @@ class BaseTime(ABC):
         return 0
 
     @abstractmethod
+    def time_ns(self) -> int:
+        return 0
+
+    @abstractmethod
     def ticks_diff(self, ticks1: int, ticks2: int) -> int:
         _ = ticks1, ticks2
         return 0

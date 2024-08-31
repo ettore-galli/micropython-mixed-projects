@@ -14,7 +14,9 @@ if TYPE_CHECKING:
 
 def test_set_button_on_state() -> None:
     mock_pin_class = MagicMock()
-    led_game = OneSecondGameEngine(time=MagicMock(), pin_class=mock_pin_class)
+    led_game = OneSecondGameEngine(
+        time=MagicMock(), pin_class=mock_pin_class, use_irq=False
+    )
     led_game.set_button_on_state()
     calls = list(mock_pin_class.mock_calls)
     calls[-1] = call().on()
@@ -22,7 +24,9 @@ def test_set_button_on_state() -> None:
 
 def test_set_button_off_state() -> None:
     mock_pin_class = MagicMock()
-    led_game = OneSecondGameEngine(time=MagicMock(), pin_class=mock_pin_class)
+    led_game = OneSecondGameEngine(
+        time=MagicMock(), pin_class=mock_pin_class, use_irq=False
+    )
     led_game.set_button_off_state()
     calls = list(mock_pin_class.mock_calls)
     calls[-1] = call().off()
@@ -31,7 +35,9 @@ def test_set_button_off_state() -> None:
 def test_play_sequence() -> None:
     mock_time = MagicMock()
     mock_pin_class = MagicMock()
-    led_game = OneSecondGameEngine(time=mock_time, pin_class=mock_pin_class)
+    led_game = OneSecondGameEngine(
+        time=mock_time, pin_class=mock_pin_class, use_irq=False
+    )
     led_game.play_sequence([(1, 0.1), (0, 0.2), (1, 0.3)])
     pin_calls = list(mock_pin_class.mock_calls)
     assert [call for call in pin_calls if call in (call().on(), call().off())] == [
@@ -99,8 +105,7 @@ def test_notify(
     mock_time = MagicMock()
     mock_pin_class = MagicMock()
     led_game = OneSecondGameEngine(
-        time=mock_time,
-        pin_class=mock_pin_class,
+        time=mock_time, pin_class=mock_pin_class, use_irq=False
     )
 
     notify_method: Callable[[], None] = getattr(led_game, method_name, lambda: None)
@@ -112,7 +117,9 @@ def test_notify(
 
 
 def test_calculate_game_result() -> None:
-    led_game = OneSecondGameEngine(time=MagicMock(), pin_class=MagicMock())
+    led_game = OneSecondGameEngine(
+        time=MagicMock(), pin_class=MagicMock(), use_irq=False
+    )
     result = led_game.calculate_game_result(
         duration=700, game_configuration=OneSecondGameConfiguration()
     )
@@ -123,8 +130,7 @@ def test_get_last_duration() -> None:
     mock_time = MagicMock()
     mock_pin_class = MagicMock()
     led_game = OneSecondGameEngine(
-        time=mock_time,
-        pin_class=mock_pin_class,
+        time=mock_time, pin_class=mock_pin_class, use_irq=False
     )
     led_game.button_status.press_start = 123
     led_game.button_status.press_stop = 369
