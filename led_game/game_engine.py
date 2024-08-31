@@ -1,3 +1,5 @@
+import sys
+
 from base import BasePin, BaseTime  # type: ignore[import-untyped]
 
 
@@ -95,6 +97,9 @@ class OneSecondGameEngine:
             trigger=self.pin_class.IRQ_FALLING | self.pin_class.IRQ_RISING,
             handler=self.button_change,
         )
+
+    def log(self, message: str) -> None:
+        sys.stdout.write(f"{message}\n")
 
     def set_button_on_state(self) -> None:
         self.button_status.press_start = self.time.ticks_ms()
