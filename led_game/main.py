@@ -5,6 +5,6 @@ from hardware import HardwarePin, HardwareTime  # type: ignore[import-untyped]
 
 if __name__ == "__main__":
     led_game = OneSecondGameEngine(
-        time=HardwareTime(), pin_class=HardwarePin, use_irq=False
+        time=HardwareTime(), pin_class=HardwarePin, use_irq=True
     )
     asyncio.run(led_game.main())
