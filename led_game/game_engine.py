@@ -173,13 +173,14 @@ class OneSecondGameEngine:
 
     def button_change(self, pin: BasePin) -> None:
         now: int = self.time.time_ns()
+
         message: str = (
             f"{pin.value()} {now} - {self.button_status.last_trig_time} = "  # noqa: ISC003 (micropython)
             + f"{now - self.button_status.last_trig_time}"
             + f"({now - self.button_status.last_trig_time > ButtonStatus.DEBOUNCE_TIME_NS})"
         )
-
         self.log(message)
+
         if now - self.button_status.last_trig_time > ButtonStatus.DEBOUNCE_TIME_NS:
 
             self.button_status.last_trig_time = now
