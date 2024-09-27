@@ -1,4 +1,4 @@
-all_targets=micropython_rpi_theremin/ led_game/ tests/ deploy/
+all_targets=micropython_rpi_theremin/ led_game/ ghost_detector/ tests/ deploy/
 
 install:
 	pip install .
@@ -37,6 +37,10 @@ micro-pwm: micro-cleanup-all micro-common
 
 micro-cap: micro-cleanup-all micro-common
 	mpremote fs cp micropython_rpi_theremin/main_cap.py :main.py 
+	mpremote reset
+
+ghost-detector: micro-cleanup-all micro-common
+	mpremote fs cp ghost_detector/main.py :main.py 
 	mpremote reset
 
 led-game: micro-cleanup-all micro-common
