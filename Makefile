@@ -15,6 +15,7 @@ lint:
 
 test:
 	export PYTHONPATH=./led_game; pytest tests/led_game 
+	export PYTHONPATH=./ghost_detector; pytest tests/ghost_detector 
 
 all: lint test
 
@@ -40,6 +41,9 @@ micro-cap: micro-cleanup-all micro-common
 	mpremote reset
 
 ghost-detector: micro-cleanup-all micro-common
+	mpremote fs cp ghost_detector/base.py :base.py 
+	mpremote fs cp ghost_detector/ghost_detector_logic.py :ghost_detector_logic.py 
+	mpremote fs cp ghost_detector/hardware_gd.py :hardware_gd.py 
 	mpremote fs cp ghost_detector/main.py :main.py 
 	mpremote reset
 
