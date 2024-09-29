@@ -1,9 +1,8 @@
 from collections.abc import Callable
 
 import utime as time  # type: ignore[import-not-found]
-from machine import Pin  # type: ignore[import-not-found]
-
 from base import Incomplete  # type: ignore[import-untyped]
+from machine import Pin  # type: ignore[import-not-found]
 
 
 class HardwareTime:
