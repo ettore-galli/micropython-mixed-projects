@@ -43,7 +43,7 @@ micro-cap: micro-cleanup-all micro-common
 ghost-detector: micro-cleanup-all micro-common
 	mpremote fs cp ghost_detector/base.py :base.py 
 	mpremote fs cp ghost_detector/ghost_detector_logic.py :ghost_detector_logic.py 
-	mpremote fs cp ghost_detector/hardware_gd.py :hardware_gd.py 
+	mpremote fs cp ghost_detector/hardware.py :hardware.py 
 	mpremote fs cp ghost_detector/main.py :main.py 
 	mpremote reset
 

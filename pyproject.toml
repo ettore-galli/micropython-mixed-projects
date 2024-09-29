@@ -37,7 +37,7 @@ test = [
 ]
 
 [tool.setuptools]
-packages = ["micropython_rpi_theremin"]
+packages = []
 
 [tool.setuptools_scm]
 
