@@ -4,7 +4,6 @@
         "-s",
         "-vvv",
         "tests/led_game",
-        "tests/ghost_detector"
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true
