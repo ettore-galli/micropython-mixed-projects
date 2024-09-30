@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from math import cos
 
-from base import BaseADC  # type: ignore[import-not-found]
+from base import BaseADC  # type: ignore[import-untyped]
 
 
 class HardwareInformation:
@@ -52,14 +52,23 @@ class GhostDetector:
 
     @staticmethod
     def perform_r_dft(samples: list[float]) -> list[float]:
-        def r_dft_term(n_samples: float, sample: float, nth_freq: float) -> float:
-            return sum(
-                sample * cos(6.28 * index * nth_freq / n_samples) / 1024.0
-                for index in range(int(n_samples))
+        def r_dft_term(
+            n_samples: float, samples: list[float], nth_freq: float
+        ) -> float:
+            real, imag = (
+                sum(
+                    samples[index] * cos(6.28 * index * nth_freq / n_samples)
+                    for index in range(int(n_samples))
+                ),
+                sum(
+                    samples[index] * cos(6.28 * index * nth_freq / n_samples)
+                    for index in range(int(n_samples))
+                ),
             )
+            return (real**2 + imag**2) ** 0.5
 
         return [
-            r_dft_term(len(samples), sample, index)
+            r_dft_term(len(samples), samples, index)
             for index, sample in enumerate(samples)
         ]
 
