@@ -14,8 +14,6 @@
                 "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/variants/RASPBERRY_PI_PICO",
                 "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/platform/include",
                 "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/platform/cxxsupport"
-                //"/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/**",
-                //"/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/variants/RASPBERRY_PI_PICO"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",
