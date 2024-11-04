@@ -6,5 +6,9 @@
         "tests/led_game",
     ],
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
+    "files.associations": {
+        "iostream": "cpp"
+    },
+    "C_Cpp.default.compilerPath": "/Users/ettoregalli/arduino-cli/arduino-cli"
 }

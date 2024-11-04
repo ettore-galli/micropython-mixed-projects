@@ -1,8 +1,4 @@
-#include <Common.h>
-#include <pins_arduino.h>
-#include <iostream>
-
-using std::cout;
+#include <Arduino.h>
 
 int LED{15};
 int BLINK_DELAY{300};
@@ -10,12 +6,15 @@ int BLINK_DELAY{300};
 void setup()
 {
     pinMode(LED, OUTPUT);
+    Serial.begin(9600);
 }
 
 void switchLed(int led, int delayTime, PinStatus status)
 {
     digitalWrite(led, status);
-    cout << "status: " << status << "\n";
+    Serial.print("status [");
+    Serial.print(status); 
+    Serial.print("] \n");
     delay(delayTime);
 };
 

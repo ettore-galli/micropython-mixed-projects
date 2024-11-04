@@ -1,23 +1,27 @@
 {
     "configurations": [
         {
-            "name": "Mac",
+            "name": "Arduino",
             "includePath": [
                 "${workspaceFolder}/**",
                 "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino",
-                "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/**",
-                "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/api",
+                "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/as_mbed_library",
+                "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/hal/include",
+                "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/targets/TARGET_RASPBERRYPI/TARGET_RP2040/**",
+                "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/targets/TARGET_RASPBERRYPI/TARGET_RP2040/TARGET_RASPBERRY_PI_PICO",
+                "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/targets/TARGET_RASPBERRYPI/TARGET_RP2040//pico-sdk/boards/include",
+                "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/cmsis/CMSIS_5/CMSIS/TARGET_CORTEX_M/Include",
                 "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/variants/RASPBERRY_PI_PICO",
-                "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/platform/**",
+                "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/platform/include",
+                "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/platform/cxxsupport"
+                //"/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/**",
+                //"/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/variants/RASPBERRY_PI_PICO"
             ],
             "defines": [],
-            "macFrameworkPath": [
-                "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"
-            ],
             "compilerPath": "/usr/bin/clang",
-            "cStandard": "c17",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "macos-clang-arm64"
+            "cStandard": "c11",
+            "cppStandard": "c++11",
+            "intelliSenseMode": "${default}"
         }
     ],
     "version": 4

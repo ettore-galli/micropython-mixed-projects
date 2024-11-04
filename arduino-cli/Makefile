@@ -8,3 +8,6 @@ deploy:
 		$(sketch) \
 		--port $(port)
 
+
+monitor:
+	arduino-cli monitor --port $(port)
