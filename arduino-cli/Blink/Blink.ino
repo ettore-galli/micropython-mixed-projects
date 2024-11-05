@@ -13,7 +13,7 @@ void switchLed(int led, int delayTime, PinStatus status)
 {
     digitalWrite(led, status);
     Serial.print("status [");
-    Serial.print(status); 
+    Serial.print(status);
     Serial.print("] \n");
     delay(delayTime);
 };
@@ -28,9 +28,26 @@ void switchLedOff(int led, int delayTime)
     switchLed(led, delayTime, LOW);
 }
 
+void sweepDelayLoop()
+{
+    int delay_base = 100;
+    int delay_step = 100;
+    int delay = delay_base;
+    while (true)
+    {
+
+        switchLedOn(LED, delay);
+        switchLedOff(LED, delay);
+
+        delay += delay_step;
+        if (delay < delay_base || delay > 10 * delay_base)
+        {
+            delay_step = -delay_step;
+        }
+    }
+}
+
 void loop()
 {
-
-    switchLedOn(LED, BLINK_DELAY);
-    switchLedOff(LED, BLINK_DELAY);
+    sweepDelayLoop();
 }
