@@ -50,6 +50,22 @@ To do so, run the following command from the terminal:
 sudo "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/post_install.sh"
 ```
 
+### Manage libraries
+
+```shell
+# Search libraries (example)
+arduino-cli lib search ssd1306
+
+# Install library (example)
+arduino-cli lib install "Adafruit SSD1306"
+```
+
+Libraries location:
+
+```shell
+/Users/ettoregalli/Documents/Arduino/libraries
+```
+
 ### Compile/Upload
 
 ```shell

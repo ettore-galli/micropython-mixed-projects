@@ -4,7 +4,12 @@
             "name": "Arduino",
             "includePath": [
                 "${workspaceFolder}/**",
+                "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/drivers/include",
+                "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/rtos/include/rtos",
+                "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/rtos/include",
+                "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/libraries/Wire",
                 "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino",
+                "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/api",
                 "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/as_mbed_library",
                 "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/hal/include",
                 "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/targets/TARGET_RASPBERRYPI/TARGET_RP2040/**",
@@ -12,12 +17,15 @@
                 "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/targets/TARGET_RASPBERRYPI/TARGET_RP2040//pico-sdk/boards/include",
                 "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/cmsis/CMSIS_5/CMSIS/TARGET_CORTEX_M/Include",
                 "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/platform/include",
-                "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/platform/cxxsupport"
+                "/Users/ettoregalli/Library/Arduino15/packages/arduino/hardware/mbed_rp2040/4.1.5/cores/arduino/mbed/platform/cxxsupport",
+                "/Users/ettoregalli/Documents/Arduino/libraries/Adafruit_SSD1306",
+                "/Users/ettoregalli/Documents/Arduino/libraries/Adafruit_GFX_Library",
+                "/Users/ettoregalli/Documents/Arduino/libraries/Adafruit_BusIO"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",
-            "cStandard": "c11",
-            "cppStandard": "c++11",
+            "cStandard": "${default}",
+            "cppStandard": "gnu++23",
             "intelliSenseMode": "${default}"
         }
     ],

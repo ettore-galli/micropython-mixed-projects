@@ -8,6 +8,11 @@ deploy:
 		$(sketch) \
 		--port $(port)
 
+deploy-ssd1306:
+	arduino-cli compile --upload --verbose \
+		--fqbn $(fully_qualified_board_name) \
+		$(sketch) \
+		--port $(port)
 
 monitor:
 	arduino-cli monitor --port $(port)
