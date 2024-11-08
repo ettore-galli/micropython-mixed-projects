@@ -8,4 +8,24 @@ determine whether they are fit for use. Unit testing finds problems early
 in the development cycle.
 
 More information about PlatformIO Unit Testing:
-- https://docs.platformio.org/en/latest/advanced/unit-testing/index.html
+
+- <https://docs.platformio.org/en/latest/advanced/unit-testing/index.html>
+
+## Various
+
+- Fix tests
+<https://community.platformio.org/t/cannot-build-tests/22066/2>
+<https://github.com/platformio/platformio-core/issues/3980>
+
+```bash
+pio upgrade --dev
+```
+
+## Fix unit tests double definition problem
+
+```bash
+/Users/ettoregalli/.platformio/packages/framework-arduino-mbed/variants/RASPBERRY_PI_PICO/libs
+# uncompress libmbed.a
+# rename 
+ar -r libmbed.a libmbed/*.*
+```

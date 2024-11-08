@@ -6,7 +6,7 @@
         "tests/led_game",
     ],
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true,
+    "python.testing.pytestEnabled": false,
     "files.associations": {
         "iostream": "cpp"
     },
