@@ -1,17 +1,20 @@
 #include <Arduino.h>
 #include <unity.h>
 
-void setUp(void) {
+void setUp(void)
+{
     // set stuff up here
 }
 
-void tearDown(void) {
+void tearDown(void)
+{
     // clean stuff up here
 }
 
 void simple_test(void)
 {
     TEST_ASSERT_EQUAL(33, 33);
+    TEST_ASSERT_EQUAL(1, 1);
 }
 
 void setup()

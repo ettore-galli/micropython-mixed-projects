@@ -1,15 +1,15 @@
 #include <Arduino.h>
 #include "blink_logic.h"
 
-int LED{ 15 };
+int LED{ LED_BUILTIN };
 int BLINK_DELAY{ 300 };
 
 void setup() {
-  pinMode(LED, OUTPUT);
+  pinMode(LED, OUTPUT); 
   Serial.begin(9600);
 }
 
-void switchLed(int led, int delayTime, PinStatus status) {
+void switchLed(int led, int delayTime, int status) {
   digitalWrite(led, status);
   Serial.print("status [");
   Serial.print(status);
