@@ -1,0 +1,4 @@
+{
+    "C_Cpp.default.compilerPath": "/Users/ettoregalli/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-gcc",
+    "C_Cpp.errorSquiggles": "enabled"
+}

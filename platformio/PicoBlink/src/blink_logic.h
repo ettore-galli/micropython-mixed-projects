@@ -1,0 +1,1 @@
+void sweepDelayLoop(int *led, void (*switchOn)(int, int), void (*switchOff)(int, int));
