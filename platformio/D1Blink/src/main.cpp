@@ -1,46 +1,10 @@
-// #include <Arduino.h>
-// #include "blink_logic.h"
-
-// int LED{LED_BUILTIN};
-// int BLINK_DELAY{300};
-
-// void setup()
-// {
-//   pinMode(LED, OUTPUT);
-//   Serial.begin(9600);
-// }
-
-// void switchLed(int led, int delayTime, int status)
-// {
-//   digitalWrite(led, status);
-//   Serial.print("status [");
-//   Serial.print(status);
-//   Serial.print("] \n");
-//   delay(delayTime);
-// };
-
-// void switchLedOn(int led, int delayTime)
-// {
-//   switchLed(led, delayTime, HIGH);
-// }
-
-// void switchLedOff(int led, int delayTime)
-// {
-//   switchLed(led, delayTime, LOW);
-// }
-
-// void loop()
-// {
-//   sweepDelayLoop(&LED, &switchLedOn, &switchLedOff);
-// }
-
 /**************************************************************************
  This is an example for our Monochrome OLEDs based on SSD1306 drivers
 
  Pick one up today in the adafruit shop!
  ------> http://www.adafruit.com/category/63_98
 
- This example is for a 128x64 pixel display using I2C to communicate
+ This example is for a 128x32 pixel display using I2C to communicate
  3 pins are required to interface (two I2C and one reset).
 
  Adafruit invests time and resources providing this open
@@ -53,14 +17,14 @@
  All text above, and the splash screen below must be
  included in any redistribution.
  **************************************************************************/
-#include <Arduino.h>
+
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
-#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+#define SCREEN_HEIGHT 32 // OLED display height, in pixels
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 // The pins for I2C are defined by the Wire-library.
@@ -68,7 +32,7 @@
 // On an arduino MEGA 2560: 20(SDA), 21(SCL)
 // On an arduino LEONARDO:   2(SDA),  3(SCL), ...
 #define OLED_RESET -1       // Reset pin # (or -1 if sharing Arduino reset pin)
-#define SCREEN_ADDRESS 0x3D ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
+#define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 #define NUMFLAKES 10 // Number of snowflakes in the animation example
@@ -444,7 +408,6 @@ void setup()
 
   // Draw a single pixel in white
   display.drawPixel(10, 10, SSD1306_WHITE);
-  Serial.println(F("display.drawPixel(10, 10, SSD1306_WHITE);"));
 
   // Show the display buffer on the screen. You MUST call display() after
   // drawing commands to make them visible on screen!
