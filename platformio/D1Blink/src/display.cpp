@@ -22,6 +22,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <string>
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 32 // OLED display height, in pixels
@@ -251,6 +252,20 @@ void testfilltriangle(void)
   delay(2000);
 }
 
+void helloWorld(std::string message)
+{
+  display.clearDisplay();
+  display.setTextSize(1);              // Normal 1:1 pixel scale
+  display.setTextColor(SSD1306_WHITE); // Draw white text
+  display.setCursor(0, 0);             // Start at top-left corner
+  display.cp437(true);                 // Use full 256 char 'Code Page 437' font
+  for (char c : message)
+  {
+    display.print(c);
+  }
+  display.display();
+}
+
 void testdrawchar(void)
 {
   display.clearDisplay();
@@ -386,6 +401,33 @@ void testanimate(const uint8_t *bitmap, uint8_t w, uint8_t h)
   }
 }
 
+void printString(int16_t x, int16_t y, std::string message, int size)
+{
+  display.clearDisplay();
+  display.setTextSize(size);           // Normal 1:1 pixel scale
+  display.setTextColor(SSD1306_WHITE); // Draw white text
+  display.setCursor(x, y);             // Start at top-left corner
+  display.cp437(true);                 // Use full 256 char 'Code Page 437' font
+  for (char c : message)
+  {
+    display.print(c);
+  }
+  display.display();
+}
+
+void displayValueBar(int value)
+{
+  display.clearDisplay();
+
+  for (int v = 0; v < value; ++v)
+  {
+    // display.drawLine(0, v, display.width() - 1, v, SSD1306_WHITE);
+    display.drawLine(4*v, 0, 4*v, display.height() - 1, SSD1306_WHITE);
+  }
+
+  display.display();
+}
+
 void display_setup()
 {
   Serial.begin(9600);
@@ -402,57 +444,59 @@ void display_setup()
   // the library initializes this with an Adafruit splash screen.
   display.display();
   delay(2000); // Pause for 2 seconds
-
-  // Clear the buffer
   display.clearDisplay();
+  display.display();
+  // // Clear the buffer
+  // display.clearDisplay();
 
-  // Draw a single pixel in white
-  display.drawPixel(10, 10, SSD1306_WHITE);
+  // // Draw a single pixel in white
+  // display.drawPixel(10, 10, SSD1306_WHITE);
 
   // Show the display buffer on the screen. You MUST call display() after
   // drawing commands to make them visible on screen!
-  display.display();
-  delay(2000);
+  // display.display();
+  // delay(2000);
   // display.display() is NOT necessary after every single drawing command,
   // unless that's what you want...rather, you can batch up a bunch of
   // drawing operations and then update the screen all at once by calling
   // display.display(). These examples demonstrate both approaches...
 
-  testdrawline(); // Draw many lines
+  // testdrawline(); // Draw many lines
 
-  testdrawrect(); // Draw rectangles (outlines)
+  // testdrawrect(); // Draw rectangles (outlines)
 
-  testfillrect(); // Draw rectangles (filled)
+  // testfillrect(); // Draw rectangles (filled)
 
-  testdrawcircle(); // Draw circles (outlines)
+  // testdrawcircle(); // Draw circles (outlines)
 
-  testfillcircle(); // Draw circles (filled)
+  // testfillcircle(); // Draw circles (filled)
 
-  testdrawroundrect(); // Draw rounded rectangles (outlines)
+  // testdrawroundrect(); // Draw rounded rectangles (outlines)
 
-  testfillroundrect(); // Draw rounded rectangles (filled)
+  // testfillroundrect(); // Draw rounded rectangles (filled)
 
-  testdrawtriangle(); // Draw triangles (outlines)
+  // testdrawtriangle(); // Draw triangles (outlines)
 
-  testfilltriangle(); // Draw triangles (filled)
+  // testfilltriangle(); // Draw triangles (filled)
 
-  testdrawchar(); // Draw characters of the default font
+  // testdrawchar(); // Draw characters of the default font
 
-  testdrawstyles(); // Draw 'stylized' characters
+  // testdrawstyles(); // Draw 'stylized' characters
 
-  testscrolltext(); // Draw scrolling text
+  // testscrolltext(); // Draw scrolling text
 
-  testdrawbitmap(); // Draw a small bitmap image
+  // testdrawbitmap(); // Draw a small bitmap image
 
-  // Invert and restore display, pausing in-between
-  display.invertDisplay(true);
-  delay(1000);
-  display.invertDisplay(false);
-  delay(1000);
+  // // Invert and restore display, pausing in-between
+  // display.invertDisplay(true);
+  // delay(1000);
+  // display.invertDisplay(false);
+  // delay(1000);
 
-  testanimate(logo_bmp, LOGO_WIDTH, LOGO_HEIGHT); // Animate bitmaps
+  // testanimate(logo_bmp, LOGO_WIDTH, LOGO_HEIGHT); // Animate bitmaps
 }
 
 void display_loop()
 {
+  testdrawchar(); // Draw characters of the default font
 }
