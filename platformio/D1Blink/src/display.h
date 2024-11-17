@@ -1,4 +1,5 @@
 #include <string>
+#include <display_device.h>
 
 void displaySetup();
 
