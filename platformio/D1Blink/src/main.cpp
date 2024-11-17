@@ -6,6 +6,8 @@
 int LED{15};
 int BLINK_DELAY{300};
 
+SignalPloter plotter(display);
+
 void setup()
 {
   displaySetup();
@@ -34,10 +36,14 @@ void switchLedOff(int led, int delayTime)
 
 void loop()
 {
-  // sweepDelayLoop(&LED, &switchLedOn, &switchLedOff);
-  // display_loop();
+   
   //printString(0, 0,  std::to_string(analogRead(A0/32)), 4);
-  displayValueBar(analogRead(A0/32));
+
+  // displayValueBar(analogRead(A0/32));
+
+  plotter.pushValue(analogRead(A0/32));
+  delayMicroseconds(100);
+ 
   // for (int i=0; i<64; ++i){
   //     std::string message{"print"};
   //     printString(0, 0,  std::to_string(i), 4);
