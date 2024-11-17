@@ -8,7 +8,7 @@ int BLINK_DELAY{300};
 
 void setup()
 {
-  display_setup();
+  displaySetup();
 }
 
 void switchLed(int led, int delayTime, int status)
