@@ -1,23 +1,16 @@
 #include <Arduino.h>
-
-struct note
-{
-  unsigned long lastTick;
-  uint pin;
-  uint delayTimeus;
-  bool status;
-};
-
-note notes[] = {
-    {0, 16, 2272, false},
-    {0, 17, 1607, false}};
+#include <notes.h>
 
 void setup()
 {
-
-  for (int i = 0; i < 2; i++)
+  Serial.begin(9600);
+  Serial.println("Setup...");
+  int microseconds = 1000000;
+  for (unsigned int i = 0; i < NUMBER_OF_NOTES; i++)
   {
     pinMode(notes[i].pin, OUTPUT);
+    notes[i].delayTimeus = int(microseconds / notes[i].freq);
+    Serial.println(notes[i].delayTimeus);
   }
 }
 
@@ -25,7 +18,7 @@ void loop()
 {
   unsigned long current = micros();
 
-  for (int i = 0; i < 2; i++)
+  for (unsigned int i = 0; i < NUMBER_OF_NOTES; i++)
   {
 
     if (current - notes[i].lastTick > notes[i].delayTimeus)
