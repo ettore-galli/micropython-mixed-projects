@@ -9,7 +9,7 @@ void setup()
   for (unsigned int i = 0; i < NUMBER_OF_NOTES; i++)
   {
     pinMode(notes[i].pin, OUTPUT);
-    notes[i].delayTimeus = int(microseconds / notes[i].freq);
+    notes[i].delayTimeus = 2 * int(microseconds / notes[i].freq);
     Serial.println(notes[i].delayTimeus);
   }
 }
@@ -24,7 +24,7 @@ void loop()
     if (current - notes[i].lastTick > notes[i].delayTimeus)
     {
       notes[i].status = !notes[i].status;
-      digitalWrite(notes[i].pin, notes[i].status);
+      gpio_put(notes[i].pin, notes[i].status);
       notes[i].lastTick = current;
     }
   }
