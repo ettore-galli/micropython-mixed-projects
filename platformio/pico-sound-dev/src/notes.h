@@ -4,7 +4,7 @@
  */
 
 const unsigned int TOTAL_NUMBER_OF_NOTES = 25;
-const unsigned int ACTUAL_NUMBER_OF_NOTES = 7;
+const unsigned int ACTUAL_NUMBER_OF_NOTES = 8;
 const float C = 523.2511306011972;
 
 struct note_reference
@@ -57,7 +57,9 @@ note notes[ACTUAL_NUMBER_OF_NOTES] = {
     {0, 3, 14, 0, false},
     {0, 4, 17, 0, false},
     {0, 5, 19, 0, false},
-    {0, 6, 21, 0, false}};
+    {0, 6, 21, 0, false},
+    {0, 7, 24, 0, false},
+};
 
 struct control_pin
 {
@@ -65,13 +67,13 @@ struct control_pin
     unsigned int control_pin;
 };
 
-control_pin ouput_pins[ACTUAL_NUMBER_OF_NOTES] = {
-    {0, 7},
-    {1, 8},
-    {2, 9},
-    {3, 10},
-    {4, 11},
-    {5, 12},
-    {6, 13},
-
+control_pin control_pins[ACTUAL_NUMBER_OF_NOTES] = {
+    {0, 8},
+    {1, 9},
+    {2, 10},
+    {3, 11},
+    {4, 12},
+    {5, 13},
+    {6, 14},
+    {7, 15},
 };
