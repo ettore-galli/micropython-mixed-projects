@@ -43,15 +43,7 @@ void initializeNoteDelaysFromFrequency()
   }
 }
 
-unsigned int newNoteNumberUp(const unsigned int note_number)
-{
-  return (note_number + 1) % TOTAL_NUMBER_OF_NOTES;
-}
 
-unsigned int newNoteNumberDown(const unsigned int note_number)
-{
-  return note_number > 0 ? note_number - 1 : TOTAL_NUMBER_OF_NOTES - 1;
-}
 
 void pitchChange(NoteNumberChangeFunction note_number_change)
 {

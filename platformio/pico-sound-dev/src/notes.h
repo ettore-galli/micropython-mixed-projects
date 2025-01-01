@@ -3,8 +3,11 @@
  * tools/notes.py
  */
 
+typedef unsigned int (*NoteNumberChangeFunction)(const unsigned int note_number);
+
 const unsigned int TOTAL_NUMBER_OF_NOTES = 25;
 const unsigned int ACTUAL_NUMBER_OF_NOTES = 8;
+
 const float C = 523.2511306011972;
 
 struct note_reference
@@ -77,3 +80,13 @@ control_pin control_pins[ACTUAL_NUMBER_OF_NOTES] = {
     {6, 14},
     {7, 15},
 };
+
+unsigned int newNoteNumberUp(const unsigned int note_number)
+{
+    return (note_number + 1) % TOTAL_NUMBER_OF_NOTES;
+}
+
+unsigned int newNoteNumberDown(const unsigned int note_number)
+{
+    return note_number > 0 ? note_number - 1 : TOTAL_NUMBER_OF_NOTES - 1;
+}
