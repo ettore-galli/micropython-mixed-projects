@@ -2,11 +2,20 @@
 #include <notes.h>
 #include "hardware/gpio.h"
 
+unsigned int PIN_DOWN = 16;
+unsigned int PIN_UP = 17;
+
+unsigned int SET_KEY_DELAY_MS = 100;
+
 void initializeInputPins()
 {
   for (unsigned int i = 0; i < ACTUAL_NUMBER_OF_NOTES; i++)
   {
     pinMode(control_pins[i].control_pin, INPUT_PULLUP);
+  }
+  for (unsigned int pin : {PIN_DOWN, PIN_UP})
+  {
+    pinMode(pin, INPUT_PULLUP);
   }
 }
 
@@ -32,6 +41,39 @@ void initializeNoteDelaysFromFrequency()
   }
 }
 
+void pitchUp()
+{
+  for (unsigned int i = 0; i < ACTUAL_NUMBER_OF_NOTES; i++)
+  {
+    unsigned int control_pin = control_pins[i].control_pin;
+
+    uint32_t control_pin_state = gpio_get(control_pin);
+
+    if (control_pin_state == LOW)
+    {
+      notes[i].note_number = (notes[i].note_number + 1) % TOTAL_NUMBER_OF_NOTES;
+      initializeNoteDelaysFromFrequency();
+    }
+  }
+}
+
+void pitchDown()
+{
+  for (unsigned int i = 0; i < ACTUAL_NUMBER_OF_NOTES; i++)
+  {
+    unsigned int control_pin = control_pins[i].control_pin;
+
+    uint32_t control_pin_state = gpio_get(control_pin);
+
+    if (control_pin_state == LOW)
+    {
+      unsigned int new_note_number = notes[i].note_number > 0 ? notes[i].note_number - 1 : TOTAL_NUMBER_OF_NOTES - 1;
+      notes[i].note_number = new_note_number;
+      initializeNoteDelaysFromFrequency();
+    }
+  }
+}
+
 void setup()
 {
   initializeInputPins();
@@ -43,6 +85,8 @@ void loop()
 {
 
   unsigned long current = micros();
+  uint32_t up_pin_state = gpio_get(PIN_UP);
+  uint32_t down_pin_state = gpio_get(PIN_DOWN);
 
   for (unsigned int i = 0; i < ACTUAL_NUMBER_OF_NOTES; i++)
   {
@@ -50,11 +94,25 @@ void loop()
 
     uint32_t control_pin_state = gpio_get(control_pin);
 
-    if ((current - notes[i].lastTick > notes[i].delayTimeus) && (control_pin_state == LOW))
+    uint32_t play_note = (control_pin_state == LOW) && (up_pin_state == HIGH) && (down_pin_state == HIGH);
+    uint32_t pitch_up = (control_pin_state == LOW) && (up_pin_state == LOW) && (down_pin_state == HIGH);
+    uint32_t pitch_down = (control_pin_state == LOW) && (up_pin_state == HIGH) && (down_pin_state == LOW);
+
+    if ((current - notes[i].lastTick > notes[i].delayTimeus) && play_note)
     {
       notes[i].status = !notes[i].status;
       gpio_put(notes[i].pin, notes[i].status);
       notes[i].lastTick = current;
+    }
+    if (pitch_up)
+    {
+      pitchUp();
+      delay(SET_KEY_DELAY_MS);
+    }
+    if (pitch_down)
+    {
+      pitchDown();
+      delay(SET_KEY_DELAY_MS);
     }
   }
 }
