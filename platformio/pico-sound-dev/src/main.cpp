@@ -7,6 +7,8 @@ unsigned int PIN_UP = 17;
 
 unsigned int SET_KEY_DELAY_MS = 100;
 
+typedef unsigned int (*NoteNumberChangeFunction)(const unsigned int note_number);
+
 void initializeInputPins()
 {
   for (unsigned int i = 0; i < ACTUAL_NUMBER_OF_NOTES; i++)
@@ -41,7 +43,17 @@ void initializeNoteDelaysFromFrequency()
   }
 }
 
-void pitchUp()
+unsigned int newNoteNumberUp(const unsigned int note_number)
+{
+  return (note_number + 1) % TOTAL_NUMBER_OF_NOTES;
+}
+
+unsigned int newNoteNumberDown(const unsigned int note_number)
+{
+  return note_number > 0 ? note_number - 1 : TOTAL_NUMBER_OF_NOTES - 1;
+}
+
+void pitchChange(NoteNumberChangeFunction note_number_change)
 {
   for (unsigned int i = 0; i < ACTUAL_NUMBER_OF_NOTES; i++)
   {
@@ -51,27 +63,20 @@ void pitchUp()
 
     if (control_pin_state == LOW)
     {
-      notes[i].note_number = (notes[i].note_number + 1) % TOTAL_NUMBER_OF_NOTES;
+      notes[i].note_number = note_number_change(notes[i].note_number);
       initializeNoteDelaysFromFrequency();
     }
   }
 }
 
+void pitchUp()
+{
+  pitchChange(newNoteNumberUp);
+}
+
 void pitchDown()
 {
-  for (unsigned int i = 0; i < ACTUAL_NUMBER_OF_NOTES; i++)
-  {
-    unsigned int control_pin = control_pins[i].control_pin;
-
-    uint32_t control_pin_state = gpio_get(control_pin);
-
-    if (control_pin_state == LOW)
-    {
-      unsigned int new_note_number = notes[i].note_number > 0 ? notes[i].note_number - 1 : TOTAL_NUMBER_OF_NOTES - 1;
-      notes[i].note_number = new_note_number;
-      initializeNoteDelaysFromFrequency();
-    }
-  }
+  pitchChange(newNoteNumberDown);
 }
 
 void setup()
