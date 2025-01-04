@@ -52,6 +52,7 @@ void setNoteNumber(unsigned int i, unsigned int note_number)
 
 void setup()
 {
+  Serial.begin(9600);
   initializeInputPins();
   initializeOutputPins();
   initializeNoteDelaysFromFrequency();
@@ -77,12 +78,16 @@ void loop()
 
     if (pitch_up && current - last_press_time > KEY_DEBOUNCE_DELAY_US)
     {
+      Serial.print("UP? ");
+      Serial.println(current);
       setNoteNumber(i, newNoteNumberUp(notes[i].note_number));
       last_press_time = current;
     }
 
     if (pitch_down && current - last_press_time > KEY_DEBOUNCE_DELAY_US)
     {
+      Serial.print("DOWN? ");
+      Serial.println(current);
       setNoteNumber(i, newNoteNumberDown(notes[i].note_number));
       last_press_time = current;
     }
