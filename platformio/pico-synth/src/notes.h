@@ -53,8 +53,6 @@ struct note
     bool status;
 };
 
-note synth_note = {0, 0, 0, 0, false};
-
 note notes[ACTUAL_NUMBER_OF_NOTES] = {
     {0, 0, 7, 0, false},
     {0, 1, 9, 0, false},

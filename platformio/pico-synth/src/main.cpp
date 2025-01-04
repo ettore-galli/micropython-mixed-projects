@@ -6,6 +6,11 @@
 typedef unsigned int (*NoteNumberChangeFunction)(const unsigned int note_number);
 
 SimpleAnalog adc(A0, 8);
+const unsigned int NUMBER_OF_HARMONICS = 2;
+note synth_note[NUMBER_OF_HARMONICS] = {
+    {0, 0, 0, 0, false},
+    {0, 1, 0, 0, false},
+};
 
 void initializeAdcPin()
 {
@@ -13,7 +18,10 @@ void initializeAdcPin()
 
 void initializeOutputPins()
 {
-  pinMode(synth_note.pin, OUTPUT);
+  for (unsigned int i = 0; i < NUMBER_OF_HARMONICS; i++)
+  {
+    pinMode(synth_note[i].pin, OUTPUT);
+  }
 }
 
 unsigned int calculateDelayMicroseconds(float frequency)
@@ -24,12 +32,16 @@ unsigned int calculateDelayMicroseconds(float frequency)
 
 void initializeNoteDelayFromFrequency()
 {
-  synth_note.delayTimeus = calculateDelayMicroseconds(notes_reference[synth_note.note_number].freq);
+  synth_note[0].delayTimeus = calculateDelayMicroseconds(notes_reference[synth_note[0].note_number].freq);
+  for (unsigned int i = 1; i < NUMBER_OF_HARMONICS; i++)
+  {
+    synth_note[i].delayTimeus = synth_note[0].delayTimeus * 2;
+  }
 }
 
 void setNoteNumber(unsigned int note_number)
 {
-  synth_note.note_number = note_number;
+  synth_note[0].note_number = note_number;
   initializeNoteDelayFromFrequency();
 }
 
@@ -53,7 +65,7 @@ void loop()
   short read = adc.analogRead8();
   unsigned int note_number = getNoteNumberFromAdcRead(read);
 
-  if (note_number != synth_note.note_number)
+  if (note_number != synth_note[0].note_number)
   {
     Serial.print(read);
     Serial.print(" / ");
@@ -67,10 +79,13 @@ void loop()
   unsigned long current = micros();
   uint32_t play_note = note_number > 0;
 
-  if ((current - synth_note.lastTick > synth_note.delayTimeus) && play_note)
+  for (unsigned int i = 0; i < NUMBER_OF_HARMONICS; i++)
   {
-    synth_note.status = !synth_note.status;
-    gpio_put(synth_note.pin, synth_note.status);
-    synth_note.lastTick = current;
+    if ((current - synth_note[i].lastTick > synth_note[i].delayTimeus) && play_note)
+    {
+      synth_note[i].status = !synth_note[i].status;
+      gpio_put(synth_note[i].pin, synth_note[i].status);
+      synth_note[i].lastTick = current;
+    }
   }
 }
