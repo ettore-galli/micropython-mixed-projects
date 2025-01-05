@@ -85,14 +85,30 @@ void loop()
 
   uint32_t play_note = current_note_number > 0;
 
-  for (unsigned int i = 0; i < NUMBER_OF_HARMONICS; i++)
+  if (play_note)
   {
-    if ((current - synth_note[i].lastTick > synth_note[i].delayTimeus) && play_note)
 
+    if (current - synth_note[NUMBER_OF_HARMONICS - 1].lastTick > synth_note[NUMBER_OF_HARMONICS - 1].delayTimeus)
     {
-      synth_note[i].status = !synth_note[i].status;
-      gpio_put(synth_note[i].pin, synth_note[i].status);
-      synth_note[i].lastTick = current;
+      for (unsigned int i = 0; i < NUMBER_OF_HARMONICS; i++)
+      {
+        synth_note[i].status = !synth_note[i].status;
+        gpio_put(synth_note[i].pin, synth_note[i].status);
+        synth_note[i].lastTick = current;
+      }
+    }
+    else
+    {
+      for (unsigned int i = 0; i < NUMBER_OF_HARMONICS; i++)
+      {
+        if (current - synth_note[i].lastTick > synth_note[i].delayTimeus)
+
+        {
+          synth_note[i].status = !synth_note[i].status;
+          gpio_put(synth_note[i].pin, synth_note[i].status);
+          synth_note[i].lastTick = current;
+        }
+      }
     }
   }
 }
