@@ -6,11 +6,16 @@
 typedef unsigned int (*NoteNumberChangeFunction)(const unsigned int note_number);
 
 SimpleAnalog adc(A0, 8);
+
 const unsigned int NUMBER_OF_HARMONICS = 2;
+
 note synth_note[NUMBER_OF_HARMONICS] = {
     {0, 0, 0, 0, false},
     {0, 1, 0, 0, false},
 };
+
+unsigned long adc_last_tick = 0;
+unsigned int current_note_number = 0;
 
 void initializeAdcPin()
 {
@@ -41,15 +46,17 @@ void initializeNoteDelayFromFrequency()
 
 void setNoteNumber(unsigned int note_number)
 {
-  synth_note[0].note_number = note_number;
+  for (unsigned int i = 0; i < NUMBER_OF_HARMONICS; i++)
+  {
+    synth_note[i].note_number = note_number;
+    synth_note[i].status = false;
+    synth_note[i].lastTick = 0;
+  }
   initializeNoteDelayFromFrequency();
 }
 
 void setup()
 {
-
-  Serial.begin(9600);
-
   initializeAdcPin();
   initializeOutputPins();
   initializeNoteDelayFromFrequency();
@@ -62,26 +69,26 @@ unsigned int getNoteNumberFromAdcRead(short adcRead)
 
 void loop()
 {
-  short read = adc.analogRead8();
-  unsigned int note_number = getNoteNumberFromAdcRead(read);
+  unsigned long current = micros();
 
-  if (note_number != synth_note[0].note_number)
+  if (current - adc_last_tick > 100000)
   {
-    Serial.print(read);
-    Serial.print(" / ");
-    Serial.print(TOTAL_NUMBER_OF_NOTES);
-    Serial.print(" = ");
-    Serial.println(note_number);
+    short read = adc.analogRead8();
+    current_note_number = getNoteNumberFromAdcRead(read);
 
-    setNoteNumber(note_number);
+    if (current_note_number != synth_note[0].note_number)
+    {
+      setNoteNumber(current_note_number);
+    }
+    adc_last_tick = current;
   }
 
-  unsigned long current = micros();
-  uint32_t play_note = note_number > 0;
+  uint32_t play_note = current_note_number > 0;
 
   for (unsigned int i = 0; i < NUMBER_OF_HARMONICS; i++)
   {
     if ((current - synth_note[i].lastTick > synth_note[i].delayTimeus) && play_note)
+
     {
       synth_note[i].status = !synth_note[i].status;
       gpio_put(synth_note[i].pin, synth_note[i].status);
