@@ -71,7 +71,7 @@ void loop()
 {
   unsigned long current = micros();
 
-  if (current - adc_last_tick > 100000)
+  if (current - adc_last_tick > 1000)
   {
     short read = adc.analogRead8();
     current_note_number = getNoteNumberFromAdcRead(read);
@@ -87,22 +87,11 @@ void loop()
 
   if (play_note)
   {
-
-    if (current - synth_note[NUMBER_OF_HARMONICS - 1].lastTick > synth_note[NUMBER_OF_HARMONICS - 1].delayTimeus)
+    for (int n = NUMBER_OF_HARMONICS - 1; n >= 0; n--)
     {
-      for (unsigned int i = 0; i < NUMBER_OF_HARMONICS; i++)
+      if (current - synth_note[n].lastTick > synth_note[n].delayTimeus)
       {
-        synth_note[i].status = !synth_note[i].status;
-        gpio_put(synth_note[i].pin, synth_note[i].status);
-        synth_note[i].lastTick = current;
-      }
-    }
-    else
-    {
-      for (unsigned int i = 0; i < NUMBER_OF_HARMONICS; i++)
-      {
-        if (current - synth_note[i].lastTick > synth_note[i].delayTimeus)
-
+        for (int i = n; i >= 0; i--)
         {
           synth_note[i].status = !synth_note[i].status;
           gpio_put(synth_note[i].pin, synth_note[i].status);
@@ -110,5 +99,5 @@ void loop()
         }
       }
     }
-  }
+   }
 }
