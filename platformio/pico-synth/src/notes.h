@@ -44,49 +44,48 @@ note_reference notes_reference[TOTAL_NUMBER_OF_NOTES] = {
     {24, 2093.004522404789},  // C
 };
 
-struct note
+const unsigned int NUMBER_OF_OUTPUT_PINS = 2;
+struct SynthNote
 {
     unsigned long lastTick;
-    unsigned int pin;
+    unsigned int pins[NUMBER_OF_OUTPUT_PINS];
+    unsigned int pin_status[NUMBER_OF_OUTPUT_PINS];
     unsigned int note_number;
     unsigned int delayTimeus;
-    bool status;
+    bool rising;
+    unsigned int status;
 };
 
-note notes[ACTUAL_NUMBER_OF_NOTES] = {
-    {0, 0, 7, 0, false},
-    {0, 1, 9, 0, false},
-    {0, 2, 12, 0, false},
-    {0, 3, 14, 0, false},
-    {0, 4, 17, 0, false},
-    {0, 5, 19, 0, false},
-    {0, 6, 21, 0, false},
-    {0, 7, 24, 0, false},
-};
-
-struct control_pin
+void nextSynthNoteStatus(SynthNote *synthNote)
 {
-    unsigned int note_pin;
-    unsigned int control_pin;
-};
-
-control_pin control_pins[ACTUAL_NUMBER_OF_NOTES] = {
-    {0, 8},
-    {1, 9},
-    {2, 10},
-    {3, 11},
-    {4, 12},
-    {5, 13},
-    {6, 14},
-    {7, 15},
-};
-
-unsigned int newNoteNumberUp(const unsigned int note_number)
-{
-    return (note_number + 1) % TOTAL_NUMBER_OF_NOTES;
+    if ((*synthNote).rising)
+    {
+        if ((*synthNote).status < NUMBER_OF_OUTPUT_PINS)
+        {
+            (*synthNote).status = (*synthNote).status + 1;
+        }
+        if ((*synthNote).status == NUMBER_OF_OUTPUT_PINS)
+        {
+            (*synthNote).rising = false;
+        }
+    }
+    else
+    {
+        if ((*synthNote).status > 0)
+        {
+            (*synthNote).status = (*synthNote).status - 1;
+        }
+        if ((*synthNote).status == 0)
+        {
+            (*synthNote).rising = true;
+        }
+    }
 }
 
-unsigned int newNoteNumberDown(const unsigned int note_number)
+void setSynthNotePinStatus(SynthNote *synthNote)
 {
-    return note_number > 0 ? note_number - 1 : TOTAL_NUMBER_OF_NOTES - 1;
+    for (unsigned int p = 0; p < NUMBER_OF_OUTPUT_PINS; p++)
+    {
+        (*synthNote).pin_status[p] = p < (*synthNote).status ? true : false;
+    }
 }

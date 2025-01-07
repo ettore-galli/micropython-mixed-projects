@@ -7,12 +7,7 @@ typedef unsigned int (*NoteNumberChangeFunction)(const unsigned int note_number)
 
 SimpleAnalog adc(A0, 8);
 
-const unsigned int NUMBER_OF_HARMONICS = 2;
-
-note synth_note[NUMBER_OF_HARMONICS] = {
-    {0, 0, 0, 0, false},
-    {0, 1, 0, 0, false},
-};
+SynthNote synthNote = {0, {0, 1}, 0, 0, false, 0};
 
 unsigned long adc_last_tick = 0;
 unsigned int current_note_number = 0;
@@ -23,9 +18,9 @@ void initializeAdcPin()
 
 void initializeOutputPins()
 {
-  for (unsigned int i = 0; i < NUMBER_OF_HARMONICS; i++)
+  for (unsigned int i = 0; i < NUMBER_OF_OUTPUT_PINS; i++)
   {
-    pinMode(synth_note[i].pin, OUTPUT);
+    pinMode(synthNote.pins[i], OUTPUT);
   }
 }
 
@@ -37,21 +32,16 @@ unsigned int calculateDelayMicroseconds(float frequency)
 
 void initializeNoteDelayFromFrequency()
 {
-  synth_note[0].delayTimeus = calculateDelayMicroseconds(notes_reference[synth_note[0].note_number].freq);
-  for (unsigned int i = 1; i < NUMBER_OF_HARMONICS; i++)
-  {
-    synth_note[i].delayTimeus = synth_note[0].delayTimeus * 2;
-  }
+  synthNote.delayTimeus = calculateDelayMicroseconds(notes_reference[synthNote.note_number].freq) / NUMBER_OF_OUTPUT_PINS;
 }
 
 void setNoteNumber(unsigned int note_number)
 {
-  for (unsigned int i = 0; i < NUMBER_OF_HARMONICS; i++)
-  {
-    synth_note[i].note_number = note_number;
-    synth_note[i].status = false;
-    synth_note[i].lastTick = 0;
-  }
+
+  synthNote.note_number = note_number;
+  synthNote.status = false;
+  synthNote.lastTick = 0;
+
   initializeNoteDelayFromFrequency();
 }
 
@@ -69,6 +59,7 @@ unsigned int getNoteNumberFromAdcRead(short adcRead)
 
 void loop()
 {
+
   unsigned long current = micros();
 
   if (current - adc_last_tick > 1000)
@@ -76,7 +67,7 @@ void loop()
     short read = adc.analogRead8();
     current_note_number = getNoteNumberFromAdcRead(read);
 
-    if (current_note_number != synth_note[0].note_number)
+    if (current_note_number != synthNote.note_number)
     {
       setNoteNumber(current_note_number);
     }
@@ -87,17 +78,15 @@ void loop()
 
   if (play_note)
   {
-    for (int n = NUMBER_OF_HARMONICS - 1; n >= 0; n--)
+    if (current - synthNote.lastTick > synthNote.delayTimeus)
     {
-      if (current - synth_note[n].lastTick > synth_note[n].delayTimeus)
+      nextSynthNoteStatus(&synthNote);
+      setSynthNotePinStatus(&synthNote);
+      for (unsigned int p = 0; p < NUMBER_OF_OUTPUT_PINS; p++)
       {
-        for (int i = n; i >= 0; i--)
-        {
-          synth_note[i].status = !synth_note[i].status;
-          gpio_put(synth_note[i].pin, synth_note[i].status);
-          synth_note[i].lastTick = current;
-        }
+        gpio_put(synthNote.pins[p], synthNote.pin_status[p]);
       }
+      synthNote.lastTick = current;
     }
-   }
+  }
 }

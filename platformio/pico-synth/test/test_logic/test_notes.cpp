@@ -11,24 +11,58 @@ void tearDown(void)
     // clean stuff up here
 }
 
-void test_new_note_number_up(void)
+void test_nextSynthNoteStatus(void)
 {
-    TEST_ASSERT_EQUAL(newNoteNumberUp(1), 2);
-    TEST_ASSERT_EQUAL(newNoteNumberUp(TOTAL_NUMBER_OF_NOTES - 1), 0);
+    int STEPS = 10;
+
+    SynthNote synthNote = {0, {0, 1}, {false, false}, 0, 0, false, 0};
+
+    unsigned int status_history[10];
+    unsigned int expected_status_history[10] = {0, 1, 2, 1, 0, 1, 2, 1, 0, 1};
+
+    for (int c = 0; c < STEPS; c++)
+    {
+        nextSynthNoteStatus(&synthNote);
+        TEST_ASSERT_EQUAL_UINT(expected_status_history[c], synthNote.status);
+    }
 }
 
-void test_new_note_number_down(void)
+void test_setSynthNotePinStatus(void)
 {
-    TEST_ASSERT_EQUAL(newNoteNumberDown(2), 1);
-    TEST_ASSERT_EQUAL(newNoteNumberDown(0), TOTAL_NUMBER_OF_NOTES - 1);
+    int STEPS = 10;
+
+    SynthNote synthNote = {0, {0, 1}, {false, false}, 0, 0, false, 0};
+
+    unsigned int status_history[10];
+    unsigned int expected_pin_status_history[10][2] = {
+        {0, 0},
+        {1, 0},
+        {1, 1},
+        {1, 0},
+        {0, 0},
+        {1, 0},
+        {1, 1},
+        {1, 0},
+        {0, 0},
+        {1, 0},
+    };
+
+    for (int c = 0; c < STEPS; c++)
+    {
+        nextSynthNoteStatus(&synthNote);
+        setSynthNotePinStatus(&synthNote);
+        TEST_ASSERT_EQUAL_UINT_ARRAY(expected_pin_status_history[c], &synthNote.pin_status, 2);
+    }
 }
 
 int main()
 {
 
     UNITY_BEGIN();
-    RUN_TEST(test_new_note_number_up);
-    RUN_TEST(test_new_note_number_down);
+    // RUN_TEST(test_new_note_number_up);
+    // RUN_TEST(test_new_note_number_down);
+    RUN_TEST(test_nextSynthNoteStatus);
+    RUN_TEST(test_setSynthNotePinStatus);
     UNITY_END();
 
     return 0;
