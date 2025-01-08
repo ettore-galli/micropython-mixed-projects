@@ -45,6 +45,7 @@ note_reference notes_reference[TOTAL_NUMBER_OF_NOTES] = {
 };
 
 const unsigned int NUMBER_OF_OUTPUT_PINS = 2;
+
 struct SynthNote
 {
     unsigned long lastTick;
@@ -56,15 +57,15 @@ struct SynthNote
     unsigned int status;
 };
 
-void nextSynthNoteStatus(SynthNote *synthNote)
+void nextSynthNoteStatus(SynthNote *synthNote, unsigned int top)
 {
     if ((*synthNote).rising)
     {
-        if ((*synthNote).status < NUMBER_OF_OUTPUT_PINS)
+        if ((*synthNote).status < top)
         {
             (*synthNote).status = (*synthNote).status + 1;
         }
-        if ((*synthNote).status == NUMBER_OF_OUTPUT_PINS)
+        if ((*synthNote).status == top)
         {
             (*synthNote).rising = false;
         }

@@ -80,8 +80,9 @@ void loop()
   {
     if (current - synthNote.lastTick > synthNote.delayTimeus)
     {
-      nextSynthNoteStatus(&synthNote);
+      nextSynthNoteStatus(&synthNote, NUMBER_OF_OUTPUT_PINS);
       setSynthNotePinStatus(&synthNote);
+
       for (unsigned int p = 0; p < NUMBER_OF_OUTPUT_PINS; p++)
       {
         gpio_put(synthNote.pins[p], synthNote.pin_status[p]);

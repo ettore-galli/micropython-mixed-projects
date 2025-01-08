@@ -22,7 +22,7 @@ void test_nextSynthNoteStatus(void)
 
     for (int c = 0; c < STEPS; c++)
     {
-        nextSynthNoteStatus(&synthNote);
+        nextSynthNoteStatus(&synthNote, 2);
         TEST_ASSERT_EQUAL_UINT(expected_status_history[c], synthNote.status);
     }
 }
@@ -49,7 +49,7 @@ void test_setSynthNotePinStatus(void)
 
     for (int c = 0; c < STEPS; c++)
     {
-        nextSynthNoteStatus(&synthNote);
+        nextSynthNoteStatus(&synthNote, 2);
         setSynthNotePinStatus(&synthNote);
         TEST_ASSERT_EQUAL_UINT_ARRAY(expected_pin_status_history[c], &synthNote.pin_status, 2);
     }
@@ -59,8 +59,6 @@ int main()
 {
 
     UNITY_BEGIN();
-    // RUN_TEST(test_new_note_number_up);
-    // RUN_TEST(test_new_note_number_down);
     RUN_TEST(test_nextSynthNoteStatus);
     RUN_TEST(test_setSynthNotePinStatus);
     UNITY_END();
