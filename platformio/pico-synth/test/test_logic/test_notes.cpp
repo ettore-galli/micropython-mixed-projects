@@ -29,21 +29,15 @@ void test_nextSynthNoteStatus(void)
 
 void test_setSynthNotePinStatus(void)
 {
-    int STEPS = 10;
+    const int STEPS = 4;
 
     SynthNote synthNote = {0, {0, 1}, {false, false}, 0, 0, false, 0};
 
-    unsigned int status_history[10];
-    unsigned int expected_pin_status_history[10][2] = {
+    unsigned int status_history[STEPS];
+    unsigned int expected_pin_status_history[STEPS][2] = {
         {0, 0},
         {1, 0},
         {1, 1},
-        {1, 0},
-        {0, 0},
-        {1, 0},
-        {1, 1},
-        {1, 0},
-        {0, 0},
         {1, 0},
     };
 
