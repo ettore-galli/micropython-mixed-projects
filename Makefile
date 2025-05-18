@@ -1,4 +1,4 @@
-all_targets=micropython_rpi_theremin/ led_game/  tests/ deploy/ rpi_server/
+all_targets=micropython_rpi_theremin/ led_game/  tests/ deploy/ rpi_client/
 
 install:
 	pip install .
@@ -46,11 +46,13 @@ led-game: micro-cleanup-all micro-common
 	mpremote fs cp led_game/main.py :main.py 
 	mpremote reset
 
-rpi-server-config:
-	mpremote fs cp rpi_server/config.json :config.json 
+rpi-client-config:
+	mpremote fs cp rpi_client/config.json :config.json 
 	mpremote reset
 
-rpi-server: micro-cleanup-all micro-common
-	mpremote fs cp rpi_server/main.py :main.py 
+rpi-client-code: micro-cleanup-all micro-common
+	mpremote fs cp rpi_client/main.py :main.py 
 	mpremote reset
 
+rpi-client: rpi-client-code rpi-client-config
+	

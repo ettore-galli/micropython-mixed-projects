@@ -38,7 +38,7 @@ def provide_connection(
         return None
 
     wlan = network.WLAN(network.STA_IF)
-    wlan.active(is_active=True)
+    wlan.active(True)  # noqa: FBT003  no keyword argument allowed
     wlan.connect(credentials.ssid, credentials.password)
     timeout = connection_timeout
     while not wlan.isconnected() and timeout > 0:
