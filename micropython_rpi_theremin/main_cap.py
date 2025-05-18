@@ -52,7 +52,7 @@ class PWMCapSensor:
             utime.sleep_ms(self.parameter_configuration.adc_delay_ms)
 
     def notify_value(self, value: int) -> None:
-        print("*" * int(value / 1024))  # noqa: T201
+        print("*" * int(value / 1024))
 
     def main(self) -> None:
         self.read_adc_values_loop(

@@ -5,7 +5,7 @@ FILE_MARKER = 16384
 
 
 def notify(*args: str) -> None:
-    print(*args)  # noqa: T201
+    print(*args)
 
 
 def join(path_a: str, path_b: str) -> str:
