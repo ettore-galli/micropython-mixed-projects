@@ -20,14 +20,6 @@ class ConfigReader:
     def __init__(self, config_file: str) -> None:
         self.config_file: str = config_file
 
-        self.display = Display(
-            sda_pin=4,
-            scl_pin=5,
-        )
-
-        self.display.text("hello", 10, 10, 1)
-        self.display.show()
-
     def read_config(self) -> WifiCredentials | None:
         try:
             with open(self.config_file) as f:
@@ -68,6 +60,15 @@ class ContinuousRequestMaker:
         self.url: str = url
         self.config_file: str
         self.wlan = None
+        self.display = Display(
+            sda_pin=4,
+            scl_pin=5,
+        )
+
+    def display_result(self, result: str) -> None:
+        self.display.clear()
+        self.display.text(result, 10, 10, 1)
+        self.display.show()
 
     def read_credentials(self) -> None:
         config_reader = ConfigReader(CONFIG_FILE_NAME)
@@ -90,6 +91,8 @@ class ContinuousRequestMaker:
             if response.status_code == HTTP_STATUS_OK:
                 print("Risposta dall'API:")
                 print(response.json())  # Stampa il JSON ricevuto
+                self.display_result(str(response.json().get("title", "Nessun titolo trovato")))
+
             else:
                 print("Errore HTTP:", response.status_code)
 
