@@ -4,6 +4,8 @@ import time
 import network  # type: ignore[import-not-found]
 import urequests  # type: ignore[import-not-found]
 
+from rpi_client.display import Display  # type: ignore[import-not-found]
+
 CONFIG_FILE_NAME = "config.json"
 HTTP_STATUS_OK = 200
 
@@ -17,6 +19,14 @@ class WifiCredentials:
 class ConfigReader:
     def __init__(self, config_file: str) -> None:
         self.config_file: str = config_file
+
+        self.display = Display(
+            sda_pin=4,
+            scl_pin=5,
+        )
+
+        self.display.text("hello", 10, 10, 1)
+        self.display.show()
 
     def read_config(self) -> WifiCredentials | None:
         try:
