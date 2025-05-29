@@ -1,3 +1,5 @@
+# type: ignore
+# ruff: noqa
 # MicroPython SSD1306 OLED driver, I2C and SPI interfaces
 #
 # https://github.com/micropython/micropython-lib/blob/master/micropython/drivers/display/ssd1306/ssd1306.py

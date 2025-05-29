@@ -4,7 +4,7 @@ import time
 import network  # type: ignore[import-not-found]
 import urequests  # type: ignore[import-not-found]
 
-from rpi_client.display import Display  # type: ignore[import-not-found]
+from rpi_client.display import Display
 
 CONFIG_FILE_NAME = "config.json"
 HTTP_STATUS_OK = 200
@@ -91,7 +91,9 @@ class ContinuousRequestMaker:
             if response.status_code == HTTP_STATUS_OK:
                 print("Risposta dall'API:")
                 print(response.json())  # Stampa il JSON ricevuto
-                self.display_result(str(response.json().get("title", "Nessun titolo trovato")))
+                self.display_result(
+                    str(response.json().get("title", "Nessun titolo trovato"))
+                )
 
             else:
                 print("Errore HTTP:", response.status_code)

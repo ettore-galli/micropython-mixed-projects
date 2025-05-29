@@ -1,13 +1,13 @@
-from rpi_client import ssd1306
 from machine import I2C, Pin  # type: ignore[import-not-found]
 
 from rpi_client.base import BaseDisplay
+from rpi_client.ssd1306 import SSD1306_I2C  # type: ignore[attr-defined]
 
 
 class Display(BaseDisplay):
     def __init__(self, sda_pin: int, scl_pin: int) -> None:
         i2c = I2C(sda=Pin(sda_pin), scl=Pin(scl_pin))
-        self.display: ssd1306.SSD1306_I2C = ssd1306.SSD1306_I2C(128, 64, i2c)
+        self.display: SSD1306_I2C = SSD1306_I2C(128, 64, i2c)
 
     def clear(self) -> None:
         self.display.fill(0)
