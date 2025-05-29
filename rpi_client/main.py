@@ -49,9 +49,9 @@ class ContinuousRequestMaker:
     def display_result(self, result: str) -> None:
         parts = result.split("T")
         self.display.clear()
-        if len(parts) == 2:
-            self.display.text(parts[0], 10, 10, 1)
-            self.display.text(parts[1], 10, 40, 1)
+        if parts:
+            for index, part in enumerate(parts):
+                self.display.text(part, 10, 5 + index * 15, 1)
         else:
             self.display.text("<no data>", 10, 10, 1)
         self.display.show()
@@ -89,12 +89,12 @@ class ContinuousRequestMaker:
 
         finally:
             if "response" in locals():
-                response.close()  # Chiudi la connessione (importante!)
+                response.close()
 
     def perform(self) -> None:
         while True:
             self.make_request()
-            time.sleep(3.14159)  # Attendi 3.14159 secondi tra le richieste
+            time.sleep(0.3)
 
 
 def main() -> None:
