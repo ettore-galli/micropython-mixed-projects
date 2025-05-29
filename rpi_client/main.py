@@ -45,6 +45,7 @@ class ContinuousRequestMaker:
             sda_pin=4,
             scl_pin=5,
         )
+        self.intra_request_delay_seconds: float = 1
 
     def display_result(self, result: str) -> None:
         parts = result.split("T")
@@ -94,7 +95,7 @@ class ContinuousRequestMaker:
     def perform(self) -> None:
         while True:
             self.make_request()
-            time.sleep(0.3)
+            time.sleep(self.intra_request_delay_seconds)
 
 
 def main() -> None:
