@@ -1,33 +1,14 @@
-import json
 import time
 
 import network  # type: ignore[import-not-found]
 import urequests  # type: ignore[import-not-found]
 
+from rpi_client.base import WifiCredentials
+from rpi_client.config_reader import ConfigReader
 from rpi_client.display import Display
 
 CONFIG_FILE_NAME = "config.json"
 HTTP_STATUS_OK = 200
-
-
-class WifiCredentials:
-    def __init__(self, ssid: str, password: str) -> None:
-        self.ssid: str = ssid
-        self.password: str = password
-
-
-class ConfigReader:
-    def __init__(self, config_file: str) -> None:
-        self.config_file: str = config_file
-
-    def read_config(self) -> WifiCredentials | None:
-        try:
-            with open(self.config_file) as f:
-                config = json.load(f)
-            return WifiCredentials(config["ssid"], config["password"])
-        except (OSError, json.JSONDecodeError) as e:
-            print("Errore nel caricamento del file JSON:", e)
-            return None
 
 
 def provide_connection(

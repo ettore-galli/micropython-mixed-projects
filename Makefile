@@ -13,6 +13,11 @@ lint:
 	ruff check $(all_targets)
 	mypy $(all_targets)
 
+make lint-fix:
+	black $(all_targets)
+	ruff check $(all_targets) --fix
+	mypy $(all_targets)
+
 test:
 	export PYTHONPATH=./led_game; pytest tests/led_game 
 
@@ -54,6 +59,7 @@ rpi-client-code: micro-cleanup-all micro-common
 	mpremote fs cp rpi_client/main.py :main.py 
 	mpremote fs mkdir rpi_client 
 	mpremote fs cp rpi_client/base.py :rpi_client/base.py 
+	mpremote fs cp rpi_client/config_reader.py :rpi_client/config_reader.py 
 	mpremote fs cp rpi_client/ssd1306.py :rpi_client/ssd1306.py 
 	mpremote fs cp rpi_client/display.py :rpi_client/display.py
 	mpremote reset
