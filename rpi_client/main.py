@@ -47,8 +47,13 @@ class ContinuousRequestMaker:
         )
 
     def display_result(self, result: str) -> None:
+        parts = result.split("T")
         self.display.clear()
-        self.display.text(result, 10, 10, 1)
+        if len(parts) == 2:
+            self.display.text(parts[0], 10, 10, 1)
+            self.display.text(parts[1], 10, 40, 1)
+        else:
+            self.display.text("<no data>", 10, 10, 1)
         self.display.show()
 
     def read_credentials(self) -> None:
@@ -73,7 +78,7 @@ class ContinuousRequestMaker:
                 print("Risposta dall'API:")
                 print(response.json())  # Stampa il JSON ricevuto
                 self.display_result(
-                    str(response.json().get("title", "Nessun titolo trovato"))
+                    str(response.json().get("datetime", "N/A")),
                 )
 
             else:
@@ -89,12 +94,12 @@ class ContinuousRequestMaker:
     def perform(self) -> None:
         while True:
             self.make_request()
-            time.sleep(10)
+            time.sleep(3.14159)  # Attendi 3.14159 secondi tra le richieste
 
 
 def main() -> None:
     crm = ContinuousRequestMaker(
-        url="https://jsonplaceholder.typicode.com/todos/1",  # API di esempio
+        url="http://worldtimeapi.org/api/timezone/Europe/Rome",  # API di esempio
     )
     crm.read_credentials()
     crm.provide_connection()
