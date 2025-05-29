@@ -1,3 +1,4 @@
+import gc
 import time
 
 import network  # type: ignore[import-not-found]
@@ -79,18 +80,19 @@ class ContinuousRequestMaker:
                 print("Risposta dall'API:")
                 print(response.json())  # Stampa il JSON ricevuto
                 self.display_result(
-                    str(response.json().get("datetime", "N/A")),
+                    str(response.json().get("dateTime", "N/A")),
                 )
 
             else:
                 print("Errore HTTP:", response.status_code)
-
+            
         except Exception as e:  # noqa: BLE001
             print("Errore nella richiesta HTTP:", e)
 
         finally:
             if "response" in locals():
                 response.close()
+            gc.collect()
 
     def perform(self) -> None:
         while True:
@@ -100,7 +102,7 @@ class ContinuousRequestMaker:
 
 def main() -> None:
     crm = ContinuousRequestMaker(
-        url="http://worldtimeapi.org/api/timezone/Europe/Rome",  # API di esempio
+        url="https://www.timeapi.io/api/Time/current/zone?timeZone=Europe/Rome"
     )
     crm.read_credentials()
     crm.provide_connection()
