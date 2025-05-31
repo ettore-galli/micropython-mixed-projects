@@ -10,5 +10,8 @@
     "files.associations": {
         "iostream": "cpp"
     },
+    "python.analysis.extraPaths": [
+        "./.venv/lib/python3.11/site-packages/micropython"
+    ],
     "C_Cpp.default.compilerPath": "/Users/ettoregalli/arduino-cli/arduino-cli"
 }

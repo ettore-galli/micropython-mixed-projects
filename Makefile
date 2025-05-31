@@ -66,3 +66,10 @@ rpi-client-code: micro-cleanup-all micro-common
 
 rpi-client: rpi-client-code rpi-client-config
 	
+display-demo: micro-cleanup-all micro-common
+	mpremote fs cp rpi_client/display_demo.py :main.py 
+	mpremote fs mkdir rpi_client 
+	mpremote fs cp rpi_client/base.py :rpi_client/base.py 
+	mpremote fs cp rpi_client/ssd1306.py :rpi_client/ssd1306.py 
+	mpremote fs cp rpi_client/display.py :rpi_client/display.py
+	mpremote reset
