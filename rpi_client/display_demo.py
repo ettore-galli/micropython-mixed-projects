@@ -20,7 +20,8 @@ class DisplayDemo:
 
     def perform(self) -> None:
         while True:
-            self.display_text("Hello, World!")
+            self.display.big_text("12:59", 1, 10, scale_x=3, scale_y=6)
+            self.display.show()
 
 
 def main() -> None:
