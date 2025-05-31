@@ -1,3 +1,5 @@
+import time
+
 from rpi_client.display import Display
 
 
@@ -20,8 +22,11 @@ class DisplayDemo:
 
     def perform(self) -> None:
         while True:
-            self.display.big_text("12:59", 1, 10, scale_x=3, scale_y=6)
-            self.display.show()
+            for i in range(100000):
+                self.display.clear()
+                self.display.big_text(str(i), 1, 10, scale_x=3, scale_y=6)
+                self.display.show()
+                time.sleep(1)
 
 
 def main() -> None:
