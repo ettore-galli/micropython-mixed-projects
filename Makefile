@@ -72,4 +72,5 @@ display-demo: micro-cleanup-all micro-common
 	mpremote fs cp rpi_client/base.py :rpi_client/base.py 
 	mpremote fs cp rpi_client/ssd1306.py :rpi_client/ssd1306.py 
 	mpremote fs cp rpi_client/display.py :rpi_client/display.py
+	mpremote fs cp rpi_client/display_big_text.py :rpi_client/display_big_text.py
 	mpremote reset
