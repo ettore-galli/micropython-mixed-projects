@@ -35,13 +35,11 @@ class Display(BaseDisplay):
     def hline(self, x: int, y: int, width: int, color: int) -> None:
         self.display.hline(x, y, width, color)
 
-    def big_text(  # noqa: PLR0913
+    def big_text(
         self,
         text: str,
         x: int,
         y: int,
-        character_width: int = 8,
-        character_height: int = 8,
         scale_x: int = 2,
         scale_y: int = 2,
     ) -> None:
@@ -50,8 +48,6 @@ class Display(BaseDisplay):
             text,
             x,
             y,
-            character_width,
-            character_height,
             scale_x,
             scale_y,
         )
