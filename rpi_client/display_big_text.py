@@ -10,6 +10,7 @@ def write_big_text(  # noqa: PLR0913
     character_height: int = 8,
     scale_x: int = 2,
     scale_y: int = 2,
+    fill_scale: int = 3,
 ) -> None:
     # temporary buffer for the text
 
@@ -24,8 +25,8 @@ def write_big_text(  # noqa: PLR0913
     w = scale_x
     h = scale_y
 
-    hw = scale_x - scale_x // 2
-    hh = scale_y - scale_y // 2
+    hw = scale_x - scale_x // fill_scale
+    hh = scale_y - scale_y // fill_scale
 
     # scale and write to the display
     for i in range(width):
