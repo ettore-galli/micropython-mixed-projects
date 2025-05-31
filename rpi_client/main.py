@@ -1,5 +1,6 @@
 import gc
 import time
+from collections.abc import Callable
 
 import network  # type: ignore[import-not-found]
 import urequests  # type: ignore[import-not-found]
@@ -14,7 +15,7 @@ HTTP_STATUS_OK = 200
 
 def provide_connection(
     credentials: WifiCredentials | None,
-    printer: callable,
+    printer: Callable,
     poll_interval: int = 1,
     connection_timeout: int = 10,
 ) -> network.WLAN | None:
