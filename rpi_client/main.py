@@ -14,11 +14,12 @@ HTTP_STATUS_OK = 200
 
 def provide_connection(
     credentials: WifiCredentials | None,
+    printer: callable,
     poll_interval: int = 1,
     connection_timeout: int = 10,
 ) -> network.WLAN | None:
     if credentials is None:
-        print("Nessuna credenziale Wi-Fi fornita.")
+        printer("Nessuna credenziale Wi-Fi fornita.")
         return None
 
     wlan = network.WLAN(network.STA_IF)
@@ -30,10 +31,10 @@ def provide_connection(
         timeout -= 1
 
     if not wlan.isconnected():
-        print("Connessione Wi-Fi fallita!")
+        printer("Connessione Wi-Fi fallita!")
         return None
 
-    print("Connesso! IP:", wlan.ifconfig()[0])
+    printer(f"Connesso! IP: {wlan.ifconfig()[0]}")
     return wlan
 
 
@@ -46,9 +47,9 @@ class ContinuousRequestMaker:
             sda_pin=4,
             scl_pin=5,
         )
-        self.intra_request_delay_seconds: float = 1
+        self.intra_request_delay_seconds: float = 10
 
-    def display_result(self, result: str) -> None:
+    def display_text(self, result: str) -> None:
         parts = result.split("T")
         self.display.clear()
         if parts:
@@ -65,29 +66,28 @@ class ContinuousRequestMaker:
     def provide_connection(self) -> None:
         self.wlan = provide_connection(
             credentials=self.credentials,
+            printer=self.display_text,
         )
 
     def make_request(self) -> None:
         if self.wlan is None:
-            print("Connessione Wi-Fi non disponibile.")
+            self.display_text("Connessione Wi-Fi non disponibile.")
             return
 
         try:
-            print("Inizio richiesta HTTP...")
+            self.display_text("Inizio richiesta HTTP...")
             response = urequests.get(self.url)  # GET request
 
             if response.status_code == HTTP_STATUS_OK:
-                print("Risposta dall'API:")
-                print(response.json())  # Stampa il JSON ricevuto
-                self.display_result(
+                self.display_text(
                     str(response.json().get("dateTime", "N/A")),
                 )
 
             else:
-                print("Errore HTTP:", response.status_code)
-            
+                self.display_text("Errore HTTP:", response.status_code)
+
         except Exception as e:  # noqa: BLE001
-            print("Errore nella richiesta HTTP:", e)
+            self.display_text("Errore nella richiesta HTTP:", e)
 
         finally:
             if "response" in locals():
