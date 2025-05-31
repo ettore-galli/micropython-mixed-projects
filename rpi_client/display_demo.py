@@ -22,11 +22,13 @@ class DisplayDemo:
 
     def perform(self) -> None:
         while True:
-            for i in range(100000):
-                self.display.clear()
-                self.display.big_text(str(i), 1, 10, scale_x=3, scale_y=6)
-                self.display.show()
-                time.sleep(1)
+            for h in range(24):
+                for m in range(60):
+                    time_str = f"{h:02}:{m:02}"
+                    self.display.clear()
+                    self.display.big_text(time_str, 1, 10, scale_x=3, scale_y=7)
+                    self.display.show()
+                    time.sleep(1)
 
 
 def main() -> None:

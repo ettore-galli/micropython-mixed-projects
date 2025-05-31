@@ -1,13 +1,16 @@
 import framebuf  # type: ignore[import-not-found]
 
 
+#
+# https://github.com/orgs/micropython/discussions/16382
+#
 def write_big_text(  # noqa: PLR0913
     display: framebuf.FrameBuffer, text: str, x: int, y: int, scale_x: int, scale_y: int
 ) -> None:
 
     character_width: int = 8
     character_height: int = 8
-    fill_scale: int = 4
+    fill_scale: int = 2
 
     # temporary buffer for the text
 
