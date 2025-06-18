@@ -37,7 +37,7 @@ class ControlDemoEngine:
     def log(self, message: str) -> None:
         sys.stdout.write(f"{self.time.ticks_ms()}: {message}\n")
 
-    async def main_loop(self) -> None:
+    async def led_loop(self) -> None:
         while True:
             print("hola", self.hardware_information.led_pin)
             self.led.on()
@@ -49,5 +49,4 @@ class ControlDemoEngine:
             self.time.sleep(1)
 
     async def main(self) -> None:
-        loop = asyncio.create_task(self.main_loop())
-        await loop
+        await asyncio.gather(self.led_loop())
