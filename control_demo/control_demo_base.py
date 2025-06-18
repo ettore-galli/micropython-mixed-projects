@@ -3,6 +3,10 @@ from typing import Any, TypeAlias
 
 Incomplete: TypeAlias = Any
 
+SpecialPins: TypeAlias = str
+
+PICO_W_INTERNAL_LED_PIN: SpecialPins = "LED"
+
 
 class BaseTime(ABC):
     @abstractmethod

@@ -1,7 +1,13 @@
+TYPE_CHECKING: bool = False
+
+
 class Optional: ...
 
 
 class ClassVar: ...
+
+
+class Union: ...
 
 
 class Tuple: ...

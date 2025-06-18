@@ -1,12 +1,16 @@
 import asyncio
 import sys
+from typing import TYPE_CHECKING
 
-from base import BasePin, BaseTime  # type: ignore[import-untyped]
+from control_demo_base import PICO_W_INTERNAL_LED_PIN, BasePin, BaseTime  # type: ignore[import-not-found]
+
+if TYPE_CHECKING:
+    from control_demo_base import SpecialPins
 
 
 class HardwareInformation:
     def __init__(self) -> None:
-        self.led_pin: int = 25
+        self.led_pin: int | SpecialPins = PICO_W_INTERNAL_LED_PIN
 
 
 class ControlDemoEngine:
@@ -35,7 +39,7 @@ class ControlDemoEngine:
 
     async def main_loop(self) -> None:
         while True:
-            print("hola")
+            print("hola", self.hardware_information.led_pin)
             self.led.on()
             self.log("on")
             self.time.sleep(1)
