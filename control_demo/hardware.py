@@ -1,11 +1,19 @@
-import asyncio
-
+import utime as time  # type: ignore[import-not-found]
 from machine import Pin  # type: ignore[import-not-found]
 
 
 class HardwareTime:
-    async def sleep(self, seconds: float) -> None:
-        await asyncio.sleep(seconds)
+    def sleep(self, seconds: float) -> None:
+        time.sleep(seconds)
+
+    def ticks_ms(self) -> int:
+        return time.ticks_ms()
+
+    def time_ns(self) -> int:
+        return time.time_ns()
+
+    def ticks_diff(self, ticks1: int, ticks2: int) -> int:
+        return time.ticks_diff(ticks1, ticks2)
 
 
 class HardwarePin:
