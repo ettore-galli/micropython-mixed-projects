@@ -1,4 +1,4 @@
-all_targets=micropython_rpi_theremin/ led_game/  tests/ deploy/ rpi_client/
+all_targets=micropython_rpi_theremin/ led_game/  tests/ deploy/ rpi_client/ control_demo/
 
 install:
 	pip install .
@@ -19,7 +19,7 @@ make lint-fix:
 	mypy $(all_targets)
 
 test:
-	export PYTHONPATH=./led_game; pytest tests/led_game 
+	export PYTHONPATH=./led_game; pytest tests 
 
 all: lint test
 
@@ -73,4 +73,11 @@ display-demo: micro-cleanup-all micro-common
 	mpremote fs cp rpi_client/ssd1306.py :rpi_client/ssd1306.py 
 	mpremote fs cp rpi_client/display.py :rpi_client/display.py
 	mpremote fs cp rpi_client/display_big_text.py :rpi_client/display_big_text.py
+	mpremote reset
+
+control-demo: micro-cleanup-all micro-common
+	mpremote fs cp control_demo/base.py :base.py 
+	mpremote fs cp control_demo/hardware.py :hardware.py 
+	mpremote fs cp control_demo/control_demo_engine.py :control_demo_engine.py 
+	mpremote fs cp control_demo/main.py :main.py 
 	mpremote reset
