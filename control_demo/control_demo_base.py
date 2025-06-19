@@ -36,3 +36,9 @@ class BasePin(ABC):
     @abstractmethod
     def value(self) -> int:
         pass
+
+
+class BaseSerialCommunicator(ABC):
+    @abstractmethod
+    async def serial_loop(self) -> None:
+        pass

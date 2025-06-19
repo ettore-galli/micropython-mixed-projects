@@ -2,7 +2,12 @@ import asyncio
 import sys
 from typing import TYPE_CHECKING
 
-from control_demo_base import PICO_W_INTERNAL_LED_PIN, BasePin, BaseTime  # type: ignore[import-not-found]
+from control_demo_base import (  # type: ignore[import-not-found]
+    PICO_W_INTERNAL_LED_PIN,
+    BasePin,
+    BaseSerialCommunicator,
+    BaseTime,
+)
 
 if TYPE_CHECKING:
     from control_demo_base import SpecialPins
@@ -21,6 +26,7 @@ class ControlDemoEngine:
         self,
         time: BaseTime,
         pin_class: type[BasePin],
+        serial_communicator_class: type[BaseSerialCommunicator],
         hardware_information: HardwareInformation | None = None,
     ) -> None:
         self.time: BaseTime = time
@@ -33,6 +39,9 @@ class ControlDemoEngine:
         )
 
         self.led = self.pin_class(self.hardware_information.led_pin, self.pin_class.OUT)
+
+        self.serial_communicator_class = serial_communicator_class
+        self.serial_communicator = self.serial_communicator_class()
 
     def log(self, message: str) -> None:
         sys.stdout.write(f"{self.time.ticks_ms()}: {message}\n")
@@ -49,4 +58,7 @@ class ControlDemoEngine:
             await self.time.sleep(1)
 
     async def main(self) -> None:
-        await asyncio.gather(self.led_loop())
+        await asyncio.gather(
+            self.led_loop(),
+            self.serial_communicator.serial_loop(),
+        )

@@ -1,8 +1,8 @@
 import asyncio
 
 import utime as time  # type: ignore[import-not-found]
-from control_demo_base import BasePin, BaseTime  # type: ignore[import-not-found]
-from machine import Pin  # type: ignore[import-not-found]
+from control_demo_base import BasePin, BaseSerialCommunicator, BaseTime  # type: ignore[import-not-found]
+from machine import UART, Pin  # type: ignore[import-not-found]
 
 
 class HardwareTime(BaseTime):
@@ -28,3 +28,22 @@ class HardwarePin(BasePin):
 
     def value(self) -> int:
         return self._pin.value()
+
+
+class SerialCommunicator(BaseSerialCommunicator):
+    def __init__(self) -> None:
+        super().__init__()
+        self.uart = UART(0, baudrate=115200)
+
+    async def serial_loop(self) -> None:
+        while True:
+            if self.uart.any():
+                try:
+                    line = self.uart.readline()
+                    if line:
+                        command = line.decode("utf-8").strip()
+                        print("Received:", command)
+
+                except Exception as e:  # noqa: BLE001
+                    print("Error:", e)
+            await asyncio.sleep_ms(10)
