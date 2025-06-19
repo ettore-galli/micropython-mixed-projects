@@ -42,11 +42,11 @@ class ControlDemoEngine:
             print("hola", self.hardware_information.led_pin)
             self.led.on()
             self.log("on")
-            self.time.sleep(1)
+            await self.time.sleep(1)
 
             self.led.off()
             self.log("off")
-            self.time.sleep(1)
+            await self.time.sleep(1)
 
     async def main(self) -> None:
         await asyncio.gather(self.led_loop())
