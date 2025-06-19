@@ -1,12 +1,12 @@
 import asyncio
 
 from control_demo_engine import ControlDemoEngine  # type: ignore[import-not-found]
-from hardware import HardwarePin, HardwareTime, SerialCommunicator  # type: ignore[import-untyped]
+from control_demo_hardware import AccessPoint, HardwarePin, HardwareTime  # type: ignore[import-not-found]
 
 if __name__ == "__main__":
     control_demo = ControlDemoEngine(
         time=HardwareTime(),
         pin_class=HardwarePin,
-        serial_communicator_class=SerialCommunicator,
+        access_point_class=AccessPoint,
     )
     asyncio.run(control_demo.main())

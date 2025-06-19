@@ -38,7 +38,15 @@ class BasePin(ABC):
         pass
 
 
-class BaseSerialCommunicator(ABC):
+class AccessPointInformation:
+    def __init__(self, essid: str, password: str) -> None:
+        self.essid: str = essid
+        self.password: str = password
+
+
+class BaseAccessPoint(ABC):
     @abstractmethod
-    async def serial_loop(self) -> None:
+    def __init__(self, access_point_information: AccessPointInformation) -> None: ...
+    @abstractmethod
+    async def startup(self) -> None:
         pass

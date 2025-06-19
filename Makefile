@@ -77,7 +77,7 @@ display-demo: micro-cleanup-all micro-common
 
 control-demo: micro-cleanup-all micro-common
 	mpremote fs cp control_demo/control_demo_base.py :control_demo_base.py 
-	mpremote fs cp control_demo/hardware.py :hardware.py 
+	mpremote fs cp control_demo/control_demo_hardware.py :control_demo_hardware.py 
 	mpremote fs cp control_demo/control_demo_engine.py :control_demo_engine.py 
 	mpremote fs cp control_demo/main.py :main.py 
 	mpremote reset
