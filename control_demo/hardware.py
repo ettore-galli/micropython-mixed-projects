@@ -1,10 +1,11 @@
 import asyncio
 
 import utime as time  # type: ignore[import-not-found]
+from control_demo_base import BasePin, BaseTime  # type: ignore[import-not-found]
 from machine import Pin  # type: ignore[import-not-found]
 
 
-class HardwareTime:
+class HardwareTime(BaseTime):
     async def sleep(self, seconds: float) -> None:
         await asyncio.sleep(seconds)
 
@@ -12,7 +13,7 @@ class HardwareTime:
         return time.ticks_ms()
 
 
-class HardwarePin:
+class HardwarePin(BasePin):
     OUT: int = 1
     IN: int = 0
 
