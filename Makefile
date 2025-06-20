@@ -91,5 +91,8 @@ control-demo-code:
 	mpremote fs cp control_demo/control_demo_server.py :control_demo_server.py 
 	mpremote fs cp control_demo/main.py :main.py 
 
+control-demo-dev: control-demo-web control-demo-code
+	mpremote reset
+
 control-demo-full: micro-cleanup-all micro-common microdot control-demo-web control-demo-code
 	mpremote reset
