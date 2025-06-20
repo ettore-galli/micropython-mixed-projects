@@ -50,3 +50,11 @@ class BaseAccessPoint(ABC):
     @abstractmethod
     async def startup(self) -> None:
         pass
+
+
+class BaseWebServer(ABC):
+    @abstractmethod
+    def __init__(self) -> None: ...
+    @abstractmethod
+    async def startup(self) -> None:
+        pass

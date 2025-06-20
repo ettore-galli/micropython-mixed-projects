@@ -10,8 +10,8 @@ install:
 
 lint:
 	black $(all_targets)
-	ruff check $(all_targets)
-	mypy $(all_targets)
+	ruff check $(all_targets) --exclude control_demo/microdot
+	mypy $(all_targets) --exclude control_demo/microdot
 
 make lint-fix:
 	black $(all_targets)
@@ -75,9 +75,16 @@ display-demo: micro-cleanup-all micro-common
 	mpremote fs cp rpi_client/display_big_text.py :rpi_client/display_big_text.py
 	mpremote reset
 
-control-demo: micro-cleanup-all micro-common
+microdot:
+	mpremote fs mkdir microdot 
+	mpremote fs cp control_demo/microdot/__init__.py :microdot/__init__.py 
+	mpremote fs cp control_demo/microdot/microdot.py :microdot/microdot.py 
+
+
+control-demo: micro-cleanup-all micro-common microdot
 	mpremote fs cp control_demo/control_demo_base.py :control_demo_base.py 
 	mpremote fs cp control_demo/control_demo_hardware.py :control_demo_hardware.py 
 	mpremote fs cp control_demo/control_demo_engine.py :control_demo_engine.py 
+	mpremote fs cp control_demo/control_demo_server.py :control_demo_server.py 
 	mpremote fs cp control_demo/main.py :main.py 
 	mpremote reset

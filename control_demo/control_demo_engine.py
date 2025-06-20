@@ -8,6 +8,7 @@ from control_demo_base import (  # type: ignore[import-not-found]
     BaseAccessPoint,
     BasePin,
     BaseTime,
+    BaseWebServer,
 )
 from control_demo_hardware import ACCESS_POINT_INFORMATION  # type: ignore[import-not-found]
 
@@ -24,11 +25,12 @@ class ControlDemoEngine:
     LED_ON: int = 1
     LED_OFF: int = 0
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         time: BaseTime,
         pin_class: type[BasePin],
         access_point_class: type[BaseAccessPoint],
+        web_server_class: type[BaseWebServer],
         hardware_information: HardwareInformation | None = None,
         access_point_information: AccessPointInformation | None = None,
     ) -> None:
@@ -54,6 +56,9 @@ class ControlDemoEngine:
             access_point_information=self.access_point_information
         )
 
+        self.web_server_class = web_server_class
+        self.web_server = self.web_server_class()
+
     def log(self, message: str) -> None:
         sys.stdout.write(f"{self.time.ticks_ms()}: {message}\n")
 
@@ -72,4 +77,5 @@ class ControlDemoEngine:
         await asyncio.gather(
             self.led_loop(),
             self.access_point.startup(),
+            self.web_server.startup(),
         )
