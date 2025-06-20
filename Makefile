@@ -84,10 +84,12 @@ control-demo-web:
 	mpremote fs mkdir web 
 	mpremote fs cp control_demo/web/index.html :web/index.html 
 
-control-demo: micro-cleanup-all micro-common microdot control-demo-web
+control-demo-code:
 	mpremote fs cp control_demo/control_demo_base.py :control_demo_base.py 
 	mpremote fs cp control_demo/control_demo_hardware.py :control_demo_hardware.py 
 	mpremote fs cp control_demo/control_demo_engine.py :control_demo_engine.py 
 	mpremote fs cp control_demo/control_demo_server.py :control_demo_server.py 
 	mpremote fs cp control_demo/main.py :main.py 
+
+control-demo-full: micro-cleanup-all micro-common microdot control-demo-web control-demo-code
 	mpremote reset
