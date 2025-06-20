@@ -76,12 +76,12 @@ display-demo: micro-cleanup-all micro-common
 	mpremote reset
 
 microdot:
-	mpremote fs mkdir microdot 
+	deploy/safe_putdir.sh microdot
 	mpremote fs cp control_demo/microdot/__init__.py :microdot/__init__.py 
 	mpremote fs cp control_demo/microdot/microdot.py :microdot/microdot.py 
 
 control-demo-web:
-	mpremote fs mkdir web 
+	deploy/safe_putdir.sh web
 	mpremote fs cp control_demo/web/index.html :web/index.html 
 
 control-demo-code:
@@ -92,6 +92,11 @@ control-demo-code:
 	mpremote fs cp control_demo/main.py :main.py 
 
 control-demo-dev: control-demo-web control-demo-code
+	@echo ------------------------------------------------
+	@echo "WARNING! Deployed only code files; cleanup and" 
+	@echo "run full deploy in case of dirty files"
+	@echo ------------------------------------------------
+	
 	mpremote reset
 
 control-demo-full: micro-cleanup-all micro-common microdot control-demo-web control-demo-code
