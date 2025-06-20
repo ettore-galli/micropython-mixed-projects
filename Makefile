@@ -80,8 +80,11 @@ microdot:
 	mpremote fs cp control_demo/microdot/__init__.py :microdot/__init__.py 
 	mpremote fs cp control_demo/microdot/microdot.py :microdot/microdot.py 
 
+control-demo-web:
+	mpremote fs mkdir web 
+	mpremote fs cp control_demo/web/index.html :web/index.html 
 
-control-demo: micro-cleanup-all micro-common microdot
+control-demo: micro-cleanup-all micro-common microdot control-demo-web
 	mpremote fs cp control_demo/control_demo_base.py :control_demo_base.py 
 	mpremote fs cp control_demo/control_demo_hardware.py :control_demo_hardware.py 
 	mpremote fs cp control_demo/control_demo_engine.py :control_demo_engine.py 
