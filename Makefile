@@ -75,6 +75,12 @@ display-demo: micro-cleanup-all micro-common
 	mpremote fs cp rpi_client/display_big_text.py :rpi_client/display_big_text.py
 	mpremote reset
 
+partial_deploy_warning:
+	@echo ------------------------------------------------
+	@echo "WARNING! Deployed only code files; cleanup and" 
+	@echo "run full deploy in case of dirty files"
+	@echo ------------------------------------------------
+
 microdot:
 	deploy/safe_putdir.sh microdot
 	mpremote fs cp control_demo/microdot/__init__.py :microdot/__init__.py 
@@ -92,11 +98,7 @@ control-demo-code:
 	mpremote fs cp control_demo/main.py :main.py 
 
 control-demo-dev: control-demo-web control-demo-code
-	@echo ------------------------------------------------
-	@echo "WARNING! Deployed only code files; cleanup and" 
-	@echo "run full deploy in case of dirty files"
-	@echo ------------------------------------------------
-	
+	@make partial_deploy_warning
 	mpremote reset
 
 control-demo-full: micro-cleanup-all micro-common microdot control-demo-web control-demo-code
