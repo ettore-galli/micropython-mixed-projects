@@ -23,10 +23,13 @@ class WebServer(BaseWebServer):
     def __init__(self) -> None:
         self.app = Microdot()
 
-        @self.app.route("/")
+        @self.app.route("/", methods=["GET", "POST"])
         async def index(
-            request,  # noqa: ANN001 ARG001
+            request,  # noqa: ANN001
         ) -> tuple[str, int, dict[str, str]]:
+            print(request.method)
+            if request.method == "POST":
+                print(request.form)
             return get_page_content("index")
 
     async def startup(self) -> None:
