@@ -10,8 +10,8 @@ install:
 
 lint:
 	black $(all_targets)
-	ruff check $(all_targets) --exclude control_demo/microdot
-	mypy $(all_targets) --exclude 'microdot'
+	ruff check $(all_targets) --exclude 'microdot'
+	mypy $(all_targets)  
 
 make lint-fix:
 	black $(all_targets)
