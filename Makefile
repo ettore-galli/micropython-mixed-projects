@@ -19,7 +19,7 @@ make lint-fix:
 	mypy $(all_targets)
 
 test:
-	export PYTHONPATH=./led_game; pytest tests 
+	export PYTHONPATH=ghost_detector:led_game:control_demo; pytest tests 
 
 all: lint test
 
