@@ -60,11 +60,13 @@ class BaseWebServer(ABC):
         pass
 
 
-class BaseDataManager(ABC):
+class BaseDataService(ABC):
 
     def __init__(self, data_file: str) -> None:
         self.data_file = data_file
 
     @abstractmethod
-    async def startup(self) -> None:
-        pass
+    def get_data(self) -> dict[str, Any]: ...
+
+    @abstractmethod
+    def save_data(self, data: dict[str, Any]) -> None: ...

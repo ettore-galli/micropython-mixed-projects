@@ -64,13 +64,10 @@ class ControlDemoEngine:
 
     async def led_loop(self) -> None:
         while True:
-            print("hola", self.hardware_information.led_pin)
             self.led.on()
-            self.log("on")
             await self.time.sleep(1)
 
             self.led.off()
-            self.log("off")
             await self.time.sleep(1)
 
     async def main(self) -> None:

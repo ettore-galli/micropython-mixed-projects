@@ -1,7 +1,8 @@
 import asyncio
 from typing import Any
 
-from control_demo_base import BaseDataManager, BaseWebServer  # type: ignore[import-not-found]
+from control_demo_base import BaseDataService, BaseWebServer  # type: ignore[import-not-found]
+from control_demo_data import DataService  # type: ignore[import-not-found]
 from microdot.microdot import Microdot, Request  # type: ignore[import-not-found]
 
 WEB_PAGES_PATH: str = "./web"
@@ -33,7 +34,7 @@ def build_page_response(rendered_html_content: str) -> tuple[str, int, dict[str,
 
 
 def get_data_from_request(request: Request) -> dict[str, Any]:
-    return request.form
+    return {key: request.form.getlist(key) for key in request.form}
 
 
 def render_page_using_data(raw_page: str, raw_data: dict) -> str:
@@ -49,27 +50,34 @@ def render_page_using_data(raw_page: str, raw_data: dict) -> str:
 def merge_dictionaries(
     dict_alfa: dict[Any, Any], dict_beta: dict[Any, Any]
 ) -> dict[Any, Any]:
-    merged = {}
+    print("MERGE:", dict_alfa, dict_beta)
+    merged: dict[Any, Any] = {}
     for dictionary in [dict_alfa, dict_beta]:
+        print("type:", type(dictionary), "repr:", repr(dictionary))
+        print("->", merged, dictionary)
         merged.update(dictionary)
 
     return merged
 
 
 async def process_page_repl(
-    page_id: str, invariant_rendering_data: dict[str, Any], request: Request
+    data_service: BaseDataService,
+    page_id: str,
+    invariant_rendering_data: dict[str, Any],
+    request: Request,
 ) -> tuple[str, int, dict[str, str]]:
     raw_page_content: str = get_raw_page_content(page_id=page_id)
+
     if request.method == METHOD_POST:
         request_data: dict[str, Any] = get_data_from_request(request=request)
         rendering_data = merge_dictionaries(invariant_rendering_data, request_data)
-        rendered_page = render_page_using_data(
-            raw_page=raw_page_content, raw_data=rendering_data
-        )
-        return build_page_response(rendered_html_content=rendered_page)
+        data_service.save_data(data=request_data)
 
+    saved_data = data_service.get_data()
+    rendering_data = merge_dictionaries(invariant_rendering_data, saved_data)
     rendered_page = render_page_using_data(
-        raw_page=raw_page_content, raw_data=invariant_rendering_data
+        raw_page=raw_page_content,
+        raw_data=rendering_data,
     )
 
     return build_page_response(rendered_html_content=rendered_page)
@@ -77,16 +85,19 @@ async def process_page_repl(
 
 class WebServer(BaseWebServer):
 
-    def __init__(self, data_service: BaseDataManager) -> None:
+    def __init__(self) -> None:
         self.app = Microdot()
-        self.data_service = data_service
+        self.led_data_service = DataService(data_file="./data/led.json", logger=print)
 
         @self.app.route("/", methods=[METHOD_GET, METHOD_POST])
         async def index(
             request: Request,
         ) -> tuple[str, int, dict[str, str]]:
             return await process_page_repl(
-                page_id="index", invariant_rendering_data={}, request=request
+                data_service=self.led_data_service,
+                page_id="index",
+                invariant_rendering_data={},
+                request=request,
             )
 
     async def startup(self) -> None:
