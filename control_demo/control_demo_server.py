@@ -1,7 +1,7 @@
 import asyncio
 from typing import Any
 
-from control_demo_base import BaseWebServer  # type: ignore[import-not-found]
+from control_demo_base import BaseDataManager, BaseWebServer  # type: ignore[import-not-found]
 from microdot.microdot import Microdot, Request  # type: ignore[import-not-found]
 
 WEB_PAGES_PATH: str = "./web"
@@ -57,19 +57,19 @@ def merge_dictionaries(
 
 
 async def process_page_repl(
-    page_id: str, base_rendering_data: dict[str, Any], request: Request
+    page_id: str, invariant_rendering_data: dict[str, Any], request: Request
 ) -> tuple[str, int, dict[str, str]]:
     raw_page_content: str = get_raw_page_content(page_id=page_id)
     if request.method == METHOD_POST:
         request_data: dict[str, Any] = get_data_from_request(request=request)
-        rendering_data = merge_dictionaries(base_rendering_data, request_data)
+        rendering_data = merge_dictionaries(invariant_rendering_data, request_data)
         rendered_page = render_page_using_data(
             raw_page=raw_page_content, raw_data=rendering_data
         )
         return build_page_response(rendered_html_content=rendered_page)
 
     rendered_page = render_page_using_data(
-        raw_page=raw_page_content, raw_data=base_rendering_data
+        raw_page=raw_page_content, raw_data=invariant_rendering_data
     )
 
     return build_page_response(rendered_html_content=rendered_page)
@@ -77,15 +77,16 @@ async def process_page_repl(
 
 class WebServer(BaseWebServer):
 
-    def __init__(self) -> None:
+    def __init__(self, data_service: BaseDataManager) -> None:
         self.app = Microdot()
+        self.data_service = data_service
 
         @self.app.route("/", methods=[METHOD_GET, METHOD_POST])
         async def index(
             request: Request,
         ) -> tuple[str, int, dict[str, str]]:
             return await process_page_repl(
-                page_id="index", base_rendering_data={}, request=request
+                page_id="index", invariant_rendering_data={}, request=request
             )
 
     async def startup(self) -> None:

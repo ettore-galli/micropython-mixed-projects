@@ -58,3 +58,13 @@ class BaseWebServer(ABC):
     @abstractmethod
     async def startup(self) -> None:
         pass
+
+
+class BaseDataManager(ABC):
+
+    def __init__(self, data_file: str) -> None:
+        self.data_file = data_file
+
+    @abstractmethod
+    async def startup(self) -> None:
+        pass

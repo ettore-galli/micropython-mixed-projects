@@ -95,6 +95,7 @@ control-demo-code:
 	mpremote fs cp control_demo/control_demo_hardware.py :control_demo_hardware.py 
 	mpremote fs cp control_demo/control_demo_engine.py :control_demo_engine.py 
 	mpremote fs cp control_demo/control_demo_server.py :control_demo_server.py 
+	mpremote fs cp control_demo/control_demo_data.py :control_demo_data.py 
 	mpremote fs cp control_demo/main.py :main.py 
 
 control-demo-dev: control-demo-web control-demo-code
