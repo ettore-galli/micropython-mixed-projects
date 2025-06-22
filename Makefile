@@ -1,4 +1,4 @@
-all_targets=micropython_rpi_theremin/ led_game/  tests/ deploy/ rpi_client/ control_demo/
+all_targets=micropython_rpi_theremin/ led_game/ deploy/ rpi_client/ control_demo/ tests/
 
 install:
 	pip install .

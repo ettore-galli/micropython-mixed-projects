@@ -34,7 +34,7 @@ def build_page_response(rendered_html_content: str) -> tuple[str, int, dict[str,
 
 
 def get_data_from_request(request: Request) -> dict[str, Any]:
-    return {key: request.form.getlist(key) for key in request.form}
+    return {key: request.form.get(key, None) for key in request.form}
 
 
 def render_page_using_data(raw_page: str, raw_data: dict) -> str:
@@ -50,11 +50,8 @@ def render_page_using_data(raw_page: str, raw_data: dict) -> str:
 def merge_dictionaries(
     dict_alfa: dict[Any, Any], dict_beta: dict[Any, Any]
 ) -> dict[Any, Any]:
-    print("MERGE:", dict_alfa, dict_beta)
     merged: dict[Any, Any] = {}
     for dictionary in [dict_alfa, dict_beta]:
-        print("type:", type(dictionary), "repr:", repr(dictionary))
-        print("->", merged, dictionary)
         merged.update(dictionary)
 
     return merged
