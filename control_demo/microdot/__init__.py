@@ -1,3 +1,5 @@
+# type: ignore
+
 from microdot.microdot import (
     Microdot,
     Request,
