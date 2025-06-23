@@ -5,7 +5,7 @@ from control_demo.control_demo_server import (
     merge_dictionaries,
     render_page_using_data,
 )
-from microdot.microdot import MultiDict  # type: ignore[import-not-found]
+from microdot.microdot import MultiDict  # type: ignore[import-not-found, import-untyped]
 
 
 def test_merge_dictionaries() -> None:

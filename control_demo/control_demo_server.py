@@ -1,12 +1,17 @@
 import asyncio
 from typing import Any
 
-from control_demo_base import BaseDataService, BaseWebServer  # type: ignore[import-not-found]
-from control_demo_data import DataService  # type: ignore[import-not-found]
-from microdot.microdot import Microdot, Request  # type: ignore[import-not-found]
+from control_demo_base import BaseDataService, BaseWebServer  # type: ignore[import-not-found, import-untyped]
+from control_demo_data import DataService  # type: ignore[import-not-found, import-untyped]
+from microdot.microdot import Microdot, Request  # type: ignore[import-not-found, import-untyped]
 
 WEB_PAGES_PATH: str = "./web"
-WEB_PAGES: dict[str, str] = {"index": "index.html"}
+
+WEB_PAGES: dict[str, str] = {
+    "index": "index.html",
+    "wifi": "wifi.html",
+}
+
 
 HTTP_OK = 200
 
@@ -85,15 +90,27 @@ class WebServer(BaseWebServer):
     def __init__(self) -> None:
         self.app = Microdot()
         self.led_data_service = DataService(data_file="./data/led.json", logger=print)
+        self.wifi_data_service = DataService(data_file="./data/wifi.json", logger=print)
 
-        @self.app.route("/", methods=[METHOD_GET, METHOD_POST])
-        async def index(
+        @self.app.route("/led", methods=[METHOD_GET, METHOD_POST])
+        async def led_page(
             request: Request,
         ) -> tuple[str, int, dict[str, str]]:
             return await process_page_repl(
                 data_service=self.led_data_service,
                 page_id="index",
-                invariant_rendering_data={},
+                invariant_rendering_data={"action": "led"},
+                request=request,
+            )
+
+        @self.app.route("/wifi", methods=[METHOD_GET, METHOD_POST])
+        async def wifi_page(
+            request: Request,
+        ) -> tuple[str, int, dict[str, str]]:
+            return await process_page_repl(
+                data_service=self.wifi_data_service,
+                page_id="wifi",
+                invariant_rendering_data={"action": "wifi"},
                 request=request,
             )
 

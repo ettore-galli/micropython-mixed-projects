@@ -89,6 +89,7 @@ microdot:
 control-demo-web:
 	deploy/safe_putdir.sh web
 	mpremote fs cp control_demo/web/index.html :web/index.html 
+	mpremote fs cp control_demo/web/wifi.html :web/wifi.html 
 
 control-demo-code:
 	mpremote fs cp control_demo/control_demo_base.py :control_demo_base.py 
