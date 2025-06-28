@@ -63,14 +63,6 @@ def merge_dictionaries(
     return merged
 
 
-def get_led_data_service() -> BaseDataService:
-    return DataService(data_file=DATA_FILES[WEB_PAGE_INDEX_LED], logger=rpi_logger)
-
-
-def get_wifi_data_service() -> BaseDataService:
-    return DataService(data_file=DATA_FILES[WEB_PAGE_INDEX_WIFI], logger=rpi_logger)
-
-
 async def process_page_repl(
     data_service: BaseDataService,
     page_id: str,
