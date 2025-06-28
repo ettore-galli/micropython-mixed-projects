@@ -69,6 +69,22 @@ class BaseAccessPoint(ABC):
         pass
 
 
+class WifiClientInformation:
+    def __init__(self, ssid: str, password: str) -> None:
+        self.ssid: str = ssid
+        self.password: str = password
+        self.poll_interval: int = 1
+        self.connection_timeout: int = 10
+
+
+class BaseWifiClient(ABC):
+    @abstractmethod
+    def __init__(self, wifi_client_information: WifiClientInformation) -> None: ...
+    @abstractmethod
+    async def startup(self) -> None:
+        pass
+
+
 class BaseWebServer(ABC):
     @abstractmethod
     def __init__(self) -> None: ...

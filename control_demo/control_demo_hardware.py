@@ -2,11 +2,14 @@ import asyncio
 
 import network  # type: ignore[import-not-found]
 import utime as time  # type: ignore[import-not-found]
-from control_demo_base import (  # type: ignore[import-not-found]
+from control_demo_base import (  # type: ignore[import-not-found, import-untyped]
     AccessPointInformation,
     BaseAccessPoint,
     BasePin,
     BaseTime,
+    BaseWifiClient,
+    WifiClientInformation,
+    rpi_logger,
 )
 from machine import Pin  # type: ignore[import-not-found]
 
@@ -45,6 +48,7 @@ class AccessPoint(BaseAccessPoint):
     def __init__(self, access_point_information: AccessPointInformation) -> None:
         super().__init__(access_point_information=access_point_information)
         self.access_point_information = access_point_information
+        self.logger = rpi_logger
 
     async def startup(self) -> None:
         ap = network.WLAN(network.AP_IF)
@@ -53,3 +57,32 @@ class AccessPoint(BaseAccessPoint):
             password=self.access_point_information.password,
         )
         ap.active(True)  # noqa: FBT003
+
+
+class WifiClient(BaseWifiClient):
+    def __init__(self, wifi_client_information: WifiClientInformation) -> None:
+        super().__init__(wifi_client_information=wifi_client_information)
+        self.access_point_information = wifi_client_information
+        self.logger = rpi_logger
+
+    async def startup(
+        self,
+        poll_interval: int = 1,
+        connection_timeout: int = 10,
+    ) -> None:
+
+        wlan = network.WLAN(network.STA_IF)
+        wlan.active(True)  # noqa: FBT003  no keyword argument allowed
+        wlan.connect(
+            self.access_point_information.ssid, self.access_point_information.password
+        )
+        timeout = connection_timeout
+        while not wlan.isconnected() and timeout > 0:
+            time.sleep(poll_interval)
+            timeout -= 1
+
+        if not wlan.isconnected():
+            self.logger("Wi-Fi connection failed.")
+            return
+
+        self.logger(f"Connected! IP: {wlan.ifconfig()[0]}")
