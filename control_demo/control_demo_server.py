@@ -1,21 +1,18 @@
 import asyncio
 from typing import Any
 
-from control_demo_base import BaseDataService, BaseWebServer  # type: ignore[import-not-found, import-untyped]
+from control_demo_base import (  # type: ignore[import-not-found, import-untyped]
+    DATA_FILES,
+    WEB_PAGE_INDEX_LED,
+    WEB_PAGE_INDEX_WIFI,
+    WEB_PAGES,
+    WEB_PAGES_PATH,
+    BaseDataService,
+    BaseWebServer,
+    rpi_logger,
+)
 from control_demo_data import DataService  # type: ignore[import-not-found, import-untyped]
 from microdot.microdot import Microdot, Request  # type: ignore[import-not-found, import-untyped]
-
-WEB_PAGES_PATH: str = "./web"
-
-
-WEB_PAGE_INDEX_WIFI = "wifi"
-WEB_PAGE_INDEX_LED = "led"
-
-WEB_PAGES: dict[str, str] = {
-    WEB_PAGE_INDEX_LED: "led.html",
-    WEB_PAGE_INDEX_WIFI: "wifi.html",
-}
-
 
 HTTP_OK = 200
 
@@ -93,8 +90,12 @@ class WebServer(BaseWebServer):
 
     def __init__(self) -> None:
         self.app = Microdot()
-        self.led_data_service = DataService(data_file="./data/led.json", logger=print)
-        self.wifi_data_service = DataService(data_file="./data/wifi.json", logger=print)
+        self.led_data_service = DataService(
+            data_file=DATA_FILES[WEB_PAGE_INDEX_LED], logger=rpi_logger
+        )
+        self.wifi_data_service = DataService(
+            data_file=DATA_FILES[WEB_PAGE_INDEX_WIFI], logger=rpi_logger
+        )
 
         @self.app.route("/led", methods=[METHOD_GET, METHOD_POST])
         async def led_page(

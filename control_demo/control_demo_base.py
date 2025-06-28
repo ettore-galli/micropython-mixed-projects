@@ -7,6 +7,23 @@ SpecialPins: TypeAlias = str
 
 PICO_W_INTERNAL_LED_PIN: SpecialPins = "LED"
 
+WEB_PAGES_PATH: str = "./web"
+
+WEB_PAGE_INDEX_WIFI = "wifi"
+WEB_PAGE_INDEX_LED = "led"
+
+WEB_PAGES: dict[str, str] = {
+    WEB_PAGE_INDEX_LED: "led.html",
+    WEB_PAGE_INDEX_WIFI: "wifi.html",
+}
+
+DATA_FILES: dict[str, str] = {
+    WEB_PAGE_INDEX_LED: "./data/led.json",
+    WEB_PAGE_INDEX_WIFI: "./data/wifi.json",
+}
+
+rpi_logger = print
+
 
 class BaseTime(ABC):
     @abstractmethod
