@@ -2,7 +2,13 @@ import json
 from collections.abc import Callable
 from typing import Any
 
-from control_demo_base import BaseDataService  # type: ignore[import-not-found]
+from control_demo_base import (  # type: ignore[import-not-found, import-untyped]
+    DATA_FILES,
+    WEB_PAGE_INDEX_LED,
+    WEB_PAGE_INDEX_WIFI,
+    BaseDataService,
+    rpi_logger,
+)
 
 
 class DataService(BaseDataService):
@@ -24,3 +30,11 @@ class DataService(BaseDataService):
                 return json.dump(data, datafile)
         except OSError as error:
             self.logger(str(error))
+
+
+def get_led_data_service() -> BaseDataService:
+    return DataService(data_file=DATA_FILES[WEB_PAGE_INDEX_LED], logger=rpi_logger)
+
+
+def get_wifi_data_service() -> BaseDataService:
+    return DataService(data_file=DATA_FILES[WEB_PAGE_INDEX_WIFI], logger=rpi_logger)
