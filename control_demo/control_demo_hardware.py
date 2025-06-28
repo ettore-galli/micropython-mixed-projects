@@ -1,8 +1,10 @@
 import asyncio
+from collections.abc import Callable
 
 import network  # type: ignore[import-not-found]
 import utime as time  # type: ignore[import-not-found]
 from control_demo_base import (  # type: ignore[import-not-found, import-untyped]
+    EMPTY_WIFI_CLIENT_INFORMATION,
     AccessPointInformation,
     BaseAccessPoint,
     BasePin,
@@ -11,7 +13,8 @@ from control_demo_base import (  # type: ignore[import-not-found, import-untyped
     WifiClientInformation,
     rpi_logger,
 )
-from machine import Pin  # type: ignore[import-not-found]
+from control_demo_data import get_wifi_data_service  # type: ignore[import-not-found, import-untyped]
+from machine import Pin  # type: ignore[import-not-found, import-untyped]
 
 
 class HardwareTime(BaseTime):
@@ -60,10 +63,18 @@ class AccessPoint(BaseAccessPoint):
 
 
 class WifiClient(BaseWifiClient):
-    def __init__(self, wifi_client_information: WifiClientInformation) -> None:
-        super().__init__(wifi_client_information=wifi_client_information)
-        self.access_point_information = wifi_client_information
+    def __init__(
+        self, wifi_client_information_retriever: Callable[[], WifiClientInformation]
+    ) -> None:
+        super().__init__(
+            wifi_client_information_retriever=wifi_client_information_retriever
+        )
+        self.wifi_client_information_retriever = wifi_client_information_retriever
         self.logger = rpi_logger
+
+        self.wifi_client_information: WifiClientInformation = (
+            EMPTY_WIFI_CLIENT_INFORMATION
+        )
 
     async def startup(
         self,
@@ -73,8 +84,9 @@ class WifiClient(BaseWifiClient):
 
         wlan = network.WLAN(network.STA_IF)
         wlan.active(True)  # noqa: FBT003  no keyword argument allowed
+        self.wifi_client_information = self.wifi_client_information_retriever()
         wlan.connect(
-            self.access_point_information.ssid, self.access_point_information.password
+            self.wifi_client_information.ssid, self.wifi_client_information.password
         )
         timeout = connection_timeout
         while not wlan.isconnected() and timeout > 0:
@@ -86,3 +98,13 @@ class WifiClient(BaseWifiClient):
             return
 
         self.logger(f"Connected! IP: {wlan.ifconfig()[0]}")
+
+
+def retrieve_wifi_client_information() -> WifiClientInformation:
+    data = get_wifi_data_service()
+    credentials = data.get_data()
+    if credentials:
+        return WifiClientInformation(
+            ssid=credentials["ssid"], password=credentials["password"]
+        )
+    return EMPTY_WIFI_CLIENT_INFORMATION

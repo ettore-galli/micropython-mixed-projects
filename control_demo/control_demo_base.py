@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from typing import Any, TypeAlias
 
 Incomplete: TypeAlias = Any
@@ -77,9 +78,14 @@ class WifiClientInformation:
         self.connection_timeout: int = 10
 
 
+EMPTY_WIFI_CLIENT_INFORMATION = WifiClientInformation(ssid="", password="")
+
+
 class BaseWifiClient(ABC):
     @abstractmethod
-    def __init__(self, wifi_client_information: WifiClientInformation) -> None: ...
+    def __init__(
+        self, wifi_client_information_retriever: Callable[[], WifiClientInformation]
+    ) -> None: ...
     @abstractmethod
     async def startup(self) -> None:
         pass

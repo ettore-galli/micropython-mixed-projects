@@ -1,16 +1,19 @@
 import asyncio
 import sys
+from collections.abc import Callable
 from typing import TYPE_CHECKING
 
-from control_demo_base import (  # type: ignore[import-not-found]
+from control_demo_base import (  # type: ignore[import-not-found, import-untyped]
     PICO_W_INTERNAL_LED_PIN,
     AccessPointInformation,
     BaseAccessPoint,
     BasePin,
     BaseTime,
     BaseWebServer,
+    BaseWifiClient,
+    WifiClientInformation,
 )
-from control_demo_hardware import ACCESS_POINT_INFORMATION  # type: ignore[import-not-found]
+from control_demo_hardware import ACCESS_POINT_INFORMATION  # type: ignore[import-not-found, import-untyped]
 
 if TYPE_CHECKING:
     from control_demo_base import SpecialPins
@@ -31,6 +34,8 @@ class ControlDemoEngine:
         pin_class: type[BasePin],
         access_point_class: type[BaseAccessPoint],
         web_server_class: type[BaseWebServer],
+        wifi_client_class: type[BaseWifiClient],
+        wifi_client_information_retriever: Callable[[], WifiClientInformation],
         hardware_information: HardwareInformation | None = None,
         access_point_information: AccessPointInformation | None = None,
     ) -> None:
@@ -56,6 +61,12 @@ class ControlDemoEngine:
             access_point_information=self.access_point_information
         )
 
+        self.wifi_client_information_retriever = wifi_client_information_retriever
+        self.wifi_client_class = wifi_client_class
+        self.wifi_client = self.wifi_client_class(
+            wifi_client_information_retriever=self.wifi_client_information_retriever
+        )
+
         self.web_server_class = web_server_class
         self.web_server = self.web_server_class()
 
@@ -75,4 +86,5 @@ class ControlDemoEngine:
             self.led_loop(),
             self.access_point.startup(),
             self.web_server.startup(),
+            self.wifi_client.startup(),
         )
