@@ -7,9 +7,13 @@ from microdot.microdot import Microdot, Request  # type: ignore[import-not-found
 
 WEB_PAGES_PATH: str = "./web"
 
+
+WEB_PAGE_INDEX_WIFI = "wifi"
+WEB_PAGE_INDEX_LED = "led"
+
 WEB_PAGES: dict[str, str] = {
-    "index": "index.html",
-    "wifi": "wifi.html",
+    WEB_PAGE_INDEX_LED: "led.html",
+    WEB_PAGE_INDEX_WIFI: "wifi.html",
 }
 
 
@@ -98,8 +102,8 @@ class WebServer(BaseWebServer):
         ) -> tuple[str, int, dict[str, str]]:
             return await process_page_repl(
                 data_service=self.led_data_service,
-                page_id="index",
-                invariant_rendering_data={"action": "led"},
+                page_id=WEB_PAGE_INDEX_LED,
+                invariant_rendering_data={"action": WEB_PAGE_INDEX_LED},
                 request=request,
             )
 
@@ -109,8 +113,8 @@ class WebServer(BaseWebServer):
         ) -> tuple[str, int, dict[str, str]]:
             return await process_page_repl(
                 data_service=self.wifi_data_service,
-                page_id="wifi",
-                invariant_rendering_data={"action": "wifi"},
+                page_id=WEB_PAGE_INDEX_WIFI,
+                invariant_rendering_data={"action": WEB_PAGE_INDEX_WIFI},
                 request=request,
             )
 
