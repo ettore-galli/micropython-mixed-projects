@@ -57,8 +57,8 @@ class BasePin(ABC):
 
 
 class AccessPointInformation:
-    def __init__(self, essid: str, password: str) -> None:
-        self.essid: str = essid
+    def __init__(self, ssid: str, password: str) -> None:
+        self.ssid: str = ssid
         self.password: str = password
 
 

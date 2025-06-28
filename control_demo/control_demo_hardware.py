@@ -43,7 +43,7 @@ class HardwarePin(BasePin):
 
 
 ACCESS_POINT_INFORMATION = AccessPointInformation(
-    essid="CONFIG-HOST", password="password!"  # noqa: S106
+    ssid="CONFIG-HOST", password="password!"  # noqa: S106
 )
 
 
@@ -56,7 +56,7 @@ class AccessPoint(BaseAccessPoint):
     async def startup(self) -> None:
         ap = network.WLAN(network.AP_IF)
         ap.config(
-            essid=self.access_point_information.essid,
+            ssid=self.access_point_information.ssid,
             password=self.access_point_information.password,
         )
         ap.active(True)  # noqa: FBT003
