@@ -118,3 +118,7 @@ control-demo-full: \
 	control-demo-data-env
 
 	mpremote reset
+
+pio-oscillator: micro-cleanup-all micro-common
+	mpremote fs cp pio_oscillator/main.py :main.py 
+	mpremote reset
