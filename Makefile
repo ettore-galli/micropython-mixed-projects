@@ -122,3 +122,8 @@ control-demo-full: \
 pio-oscillator: micro-cleanup-all micro-common
 	mpremote fs cp pio_oscillator/main.py :main.py 
 	mpremote reset
+
+
+pio-strobo-tuner: micro-cleanup-all micro-common
+	mpremote fs cp pio_strobo_tuner/main.py :main.py 
+	mpremote reset
