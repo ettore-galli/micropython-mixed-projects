@@ -14,6 +14,10 @@ if TYPE_CHECKING:
         x_dec,
     )
 
+STROBO_DISPLAY_PINS = [16, 17, 18, 19, 20]
+STROBO_PIO_SM_ID = 1
+STROBO_PIO_SM_FREQUENCY = 5000
+
 
 def generate_pio_strobo_sequence(
     set_void: int = 6, nop_void: int = 29, loop_delay: int = 31
@@ -63,13 +67,13 @@ def generate_pio_strobo_sequence(
     return decorated
 
 
-for p in [16, 17, 18, 19, 20]:
+for p in STROBO_DISPLAY_PINS:
     Pin(p, Pin.OUT)
 
 sm1 = rp2.StateMachine(
-    1,
+    STROBO_PIO_SM_ID,
     generate_pio_strobo_sequence(),
-    freq=3000,
-    set_base=Pin(16),
+    freq=STROBO_PIO_SM_FREQUENCY,
+    set_base=Pin(STROBO_DISPLAY_PINS[0]),
 )
 sm1.active(1)
