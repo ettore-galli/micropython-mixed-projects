@@ -33,6 +33,8 @@ def blink_1hz():
     jmp(x_dec, "delay_low")
 
 
+
+
 @rp2.asm_pio(
     set_init=(
         rp2.PIO.OUT_LOW,
@@ -43,13 +45,35 @@ def blink_1hz():
     )
 )
 def seq5():
-    # sequenza: un LED alla volta
-    set(pins, 0b00001)[31]  # GP16
-    set(pins, 0b00010)[31]  # GP17
-    set(pins, 0b00100)[31]  # GP18
-    set(pins, 0b01000)[31]  # GP19
-    set(pins, 0b10000)[31]  # GP20
-
+    set(pins, 0b00001)[31]   
+    set(x, 31)
+    label("loop1")
+    nop()[31]
+    jmp(x_dec, "loop1")
+    # ------------------------------
+    set(pins, 0b00010)[31]   
+    set(x, 31)
+    label("loop2")
+    nop()[31]
+    jmp(x_dec, "loop2")
+    # ------------------------------
+    set(pins, 0b00100)[31] 
+    set(x, 31)
+    label("loop3")
+    nop()[31]
+    jmp(x_dec, "loop3") 
+    # ------------------------------
+    set(pins, 0b01000)[31] 
+    set(x, 31)
+    label("loop4")
+    nop()[31]
+    jmp(x_dec, "loop4")  
+    # ------------------------------
+    set(pins, 0b10000)[31]   
+    set(x, 31)
+    label("loop5")
+    nop()[31]
+    jmp(x_dec, "loop5") 
 
 # Create and start a StateMachine with blink_1hz, outputting on Pin(25)
 sm0 = rp2.StateMachine(0, blink_1hz, freq=4000, set_base=Pin(15))
