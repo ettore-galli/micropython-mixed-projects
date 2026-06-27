@@ -1,8 +1,19 @@
+from typing import TYPE_CHECKING
+
 import rp2
 from machine import Pin  # pyright: ignore[reportMissingModuleSource]
 import time
 
-# from rp2.asm_pio import *  # pyright: ignore[reportMissingModuleSource]
+if TYPE_CHECKING:
+    from rp2.asm_pio import (  # pyright: ignore[reportMissingModuleSource]
+        set,
+        label,
+        nop,
+        jmp,
+        pins,
+        x,
+        x_dec,
+    )
 
 
 @rp2.asm_pio(set_init=rp2.PIO.OUT_LOW)
