@@ -20,7 +20,7 @@ STROBO_PIO_SM_FREQUENCY = 5000
 
 
 def generate_pio_strobo_sequence(
-    set_void: int = 6, nop_void: int = 29, loop_delay: int = 31
+    set_void: int = 12, nop_void: int = 29, loop_delay: int = 31
 ):
 
     def strobo_sequence():
