@@ -19,6 +19,23 @@ STROBO_PIO_SM_ID = 1
 STROBO_PIO_SM_FREQUENCY = 5000
 
 
+@rp2.asm_pio(
+    set_init=(
+        rp2.PIO.OUT_LOW,
+        rp2.PIO.OUT_LOW,
+        rp2.PIO.OUT_LOW,
+        rp2.PIO.OUT_LOW,
+        rp2.PIO.OUT_LOW,
+    )
+)
+def strobo_sequence_direct():
+    set(pins, 0b00001)[1]
+    set(pins, 0b00010)[1]
+    set(pins, 0b00100)[1]
+    set(pins, 0b01000)[1]
+    set(pins, 0b10000)[1]
+
+
 def generate_pio_strobo_sequence(
     set_void: int = 12, nop_void: int = 29, loop_delay: int = 31
 ):
@@ -72,7 +89,7 @@ for p in STROBO_DISPLAY_PINS:
 
 sm1 = rp2.StateMachine(
     STROBO_PIO_SM_ID,
-    generate_pio_strobo_sequence(),
+    strobo_sequence_direct,
     freq=STROBO_PIO_SM_FREQUENCY,
     set_base=Pin(STROBO_DISPLAY_PINS[0]),
 )
